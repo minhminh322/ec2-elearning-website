@@ -1,6 +1,10 @@
 import { db } from "@/lib/db";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
+import getSession from "@/actions/getSession";
+import { redirect } from "next/navigation";
+import { User } from "@/lib/interface";
+import { Navbar } from "@/components/navigation/navbar";
 
 const CourseLayout = async ({
   children,
@@ -9,6 +13,11 @@ const CourseLayout = async ({
   children: React.ReactNode;
   params: { courseId: string };
 }) => {
+  const session = await getSession();
+  if (!session) {
+    return redirect("/");
+  }
+
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
@@ -16,9 +25,9 @@ const CourseLayout = async ({
     include: {
       lessons: {
         include: {
-          UserProgress: {
+          userProgress: {
             where: {
-              userId: "1",
+              userId: (session?.user as User).id,
             },
           },
         },
@@ -28,12 +37,17 @@ const CourseLayout = async ({
       },
     },
   });
+
+  if (!course) {
+    return redirect("/");
+  }
+
   return (
     <div className="h-full">
-      <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
-        <CourseNavbar course={course} progressCount={1} />
+      <div className="h-[80px] fixed inset-x-0 w-full z-50">
+        <Navbar />
       </div>
-      <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
+      <div className="hidden md:flex h-full w-80 flex-col fixed top-[80px] z-50">
         <CourseSidebar course={course} progressCount={1} />
       </div>
       <main className="md:pl-80 pt-[80px] h-full">{children}</main>

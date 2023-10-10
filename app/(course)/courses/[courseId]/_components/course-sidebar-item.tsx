@@ -20,7 +20,8 @@ export const CourseSidebarItem = ({
   const router = useRouter();
 
   const isActive = pathname?.includes(id);
-  const Icon = PlayCircle;
+  const Icon = isCompleted ? CheckCircle : PlayCircle;
+
   const onClick = () => {
     router.push(`/courses/${courseId}/${id}`);
   };

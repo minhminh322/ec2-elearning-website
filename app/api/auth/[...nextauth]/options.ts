@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, session }) {
-      console.log("jwt", { token, user, session });
+      // console.log("jwt", { token, user, session });
       // if (account?.accessToken) {
       //   token.accessToken = account.accessToken;
       // }
@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      console.log("session", { session, token, user });
+      // console.log("session", { session, token, user });
       return {
         ...session,
         user: {

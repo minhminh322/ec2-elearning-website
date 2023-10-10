@@ -14,13 +14,6 @@ const CourseIdPage = async ({
     },
     include: {
       lessons: {
-        include: {
-          UserProgress: {
-            where: {
-              userId: "1",
-            },
-          },
-        },
         orderBy: {
           position: "asc",
         },

@@ -10,16 +10,18 @@ export default async function Dashboard() {
   //   return redirect("/api/auth/signin");
   // }
 
-  const { completedCourse, inProgressCourse } = await getDashboard(
-    session?.user?.id // @ts-ignore
-  );
+  const { completedCourse, inProgressCourse } = session
+    ? await getDashboard((session?.user as User).id)
+    : { completedCourse: [], inProgressCourse: [] };
 
   return (
     <div className="p-6 space-y-4">
-      <h1>Hello, {session?.user?.name}</h1>
+      {/* <h1>Hello, {session?.user?.name}</h1> */}
       {/* <Button>Click me</Button> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-      <CourseList courses={[...inProgressCourse, ...completedCourse]} />
+      {session && (
+        <CourseList courses={[...inProgressCourse, ...completedCourse]} />
+      )}
     </div>
   );
 }
