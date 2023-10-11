@@ -24,16 +24,30 @@ model User {
   sessions      Session[]
 }
 
-model Course {
+model Product {
   id          String     @id @default(uuid())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  name        String
+  description String?
+  imageId     String?
+  price       Float?
+  purchases   Purchase[]
+  Course      Course[]
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   title       String
   description String?
-  imageUrl    String?
-  price       Float?
+  imageId     String?
+  position    Int
+  productId   String
   lessons     Lesson[]
-  purchases   Purchase[]
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Lesson {
@@ -47,18 +61,19 @@ model Lesson {
   isPublished  Boolean        @default(false)
   isFree       Boolean        @default(false)
   courseId     String
-  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
   userProgress UserProgress[]
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Video {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  url       String
-  lessonId  String   @unique
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  playbackId String
+  lessonId   String   @unique
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 }
 
 model UserProgress {
@@ -67,8 +82,9 @@ model UserProgress {
   updatedAt   DateTime @updatedAt
   userId      String
   lessonId    String
-  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   isCompleted Boolean  @default(false)
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
 }
@@ -78,10 +94,11 @@ model Purchase {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  productId String
 
-  @@unique([userId, courseId])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
 }
 
 model Account {

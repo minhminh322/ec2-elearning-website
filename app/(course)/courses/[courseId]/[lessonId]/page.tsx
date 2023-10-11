@@ -39,12 +39,12 @@ const lessonPage = async ({
     <div>
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
-          <h1 className="text-2xl">{lesson?.courseId}</h1>
-          {video && <VideoPlayer videoUrl={video.url} />}
+          {/* <h1 className="text-2xl">{lesson?.courseId}</h1> */}
+          {video && <VideoPlayer videoUrl={video.playbackId} />}
         </div>
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
-            <h2 className="text-2xl">Lesson 1</h2>
+            <h2 className="text-2xl font-semibold mb-2">{lesson?.title}</h2>
             {/* <Button>Mark as complete</Button> or Purchase */}
             <CourseProgressButton
               lessonId={params.lessonId}
