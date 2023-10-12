@@ -1,48 +1,55 @@
-import { Course, Lesson } from "@prisma/client";
+import { Course, Product } from "@prisma/client";
 import { db } from "@/lib/db";
-type CourseWithLessons = Course & {
-  lessons: Lesson[];
+type ProductWithCourses = Product & {
+  courses: Course[];
   progress: number | null;
 };
-type DashboardCourses = {
-  completedCourse: CourseWithLessons[];
-  inProgressCourse: CourseWithLessons[];
+type DashboardProducts = {
+  completedProducts: ProductWithCourses[];
+  inProgressProducts: ProductWithCourses[];
 };
 
 export const getDashboard = async (
   userId: string
-): Promise<DashboardCourses> => {
+): Promise<DashboardProducts> => {
   try {
-    const purchasedCourses = await db.purchase.findMany({
+    const purchasedProducts = await db.purchase.findMany({
       where: {
-        userId: userId,
+        userId,
       },
       select: {
-        course: {
+        product: {
           include: {
-            lessons: true,
+            courses: true,
           },
         },
       },
     });
 
-    const courses = purchasedCourses.map(
-      (purchase) => purchase.course
-    ) as CourseWithLessons[];
-    // const inProgressCourse = courses.filter((course) => course.progress !== 100);
-    for (let course of courses) {
-      course["progress"] = 1;
+    const products = purchasedProducts.map(
+      (purchase) => purchase.product
+    ) as ProductWithCourses[];
+
+    for (let prod of products) {
+      prod["progress"] = 1;
     }
 
+    const inProgressProducts = products.filter(
+      (product) => (product.progress ?? 0) < 100
+    );
+    const completedProducts = products.filter(
+      (product) => product.progress === 100
+    );
+
     return {
-      completedCourse: [],
-      inProgressCourse: courses,
+      completedProducts: completedProducts,
+      inProgressProducts: inProgressProducts,
     };
   } catch (error) {
     console.log("[ERROR] getDashboard: ", error);
     return {
-      completedCourse: [],
-      inProgressCourse: [],
+      completedProducts: [],
+      inProgressProducts: [],
     };
   }
 };

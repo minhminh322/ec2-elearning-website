@@ -1,8 +1,9 @@
 import { Course } from "@prisma/client";
 import { CourseCard } from "./courses-card";
 type CourseWithLesson = Course & {
-  lessons: { id: string }[];
-  progress: number | null;
+  lessons: {
+    userProgress: {}[];
+  }[];
 };
 
 interface CourseListProps {
@@ -18,10 +19,10 @@ export const CourseList = ({ courses }: CourseListProps) => {
             key={course.id}
             id={course.id}
             title={course.title}
-            imageUrl={course.imageUrl!}
-            chaptersLength={course.lessons.length}
-            price={course.price!}
-            progress={course.progress}
+            imageId={course.imageId!}
+            lessonsLength={course.lessons.length}
+            progress={1}
+            productId={course.productId}
           />
         ))}
       </div>

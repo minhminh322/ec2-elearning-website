@@ -6,6 +6,7 @@ const CourseIdPage = async ({
 }: {
   params: {
     courseId: string;
+    productId: string;
   };
 }) => {
   const course = await db.course.findUnique({
@@ -25,7 +26,9 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
-  return redirect(`/courses/${course.id}/${course.lessons[0].id}`);
+  return redirect(
+    `/${params.productId}/courses/${course.id}/${course.lessons[0].id}`
+  );
 };
 
 export default CourseIdPage;

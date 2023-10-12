@@ -33,7 +33,7 @@ model Product {
   imageId     String?
   price       Float?
   purchases   Purchase[]
-  Course      Course[]
+  courses     Course[]
 }
 
 model Course {

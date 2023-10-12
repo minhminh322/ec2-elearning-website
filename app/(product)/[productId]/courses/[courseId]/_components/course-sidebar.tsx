@@ -7,6 +7,7 @@ import { User } from "@/lib/interface";
 import { CourseProgress } from "@/components/course-progress";
 
 interface CourseSidebarProps {
+  productId: string;
   course: Course & {
     lessons: (Lesson & {
       userProgress: UserProgress[] | null;
@@ -16,6 +17,7 @@ interface CourseSidebarProps {
 }
 
 export const CourseSidebar = async ({
+  productId,
   course,
   progressCount,
 }: CourseSidebarProps) => {
@@ -26,9 +28,9 @@ export const CourseSidebar = async ({
 
   const purchase = await db.purchase.findUnique({
     where: {
-      userId_courseId: {
+      userId_productId: {
         userId: (session?.user as User).id,
-        courseId: course.id,
+        productId: productId,
       },
     },
   });

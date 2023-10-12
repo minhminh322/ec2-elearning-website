@@ -1,31 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
+import { IconBadge } from "./icon-badge";
 import { BookOpen } from "lucide-react";
 
-import { IconBadge } from "@/components/icon-badge";
-import { formatPrice } from "@/lib/format";
-import { CourseProgress } from "@/components/course-progress";
-
-interface CourseCardProps {
+interface ProductCardProps {
   id: string;
   title: string;
   imageId: string;
-  lessonsLength: number;
-  productId: string;
+  price: number;
   progress: number | null;
 }
-
-export const CourseCard = ({
+export const ProductCard = ({
   id,
   title,
   imageId,
-  lessonsLength,
-  productId,
+  price,
   progress,
-}: CourseCardProps) => {
+}: ProductCardProps) => {
   const image_base_url = process.env.CDN_URL + "/images/";
   return (
-    <Link href={`/${productId}/courses/${id}`}>
+    <Link href={`/${id}`}>
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
@@ -41,12 +35,12 @@ export const CourseCard = ({
           </div>
           <p className="text-xs text-muted-foreground">Categorizy</p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
-            <div className="flex items-center gap-x-1 text-slate-500">
+            {/* <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
-                {lessonsLength} {lessonsLength === 1 ? "Lesson" : "Lessons"}
+                {chaptersLength} {chaptersLength === 1 ? "Lesson" : "Lessons"}
               </span>
-            </div>
+            </div> */}
           </div>
           {/* {progress !== null ? (
             <CourseProgress

@@ -11,7 +11,7 @@ const CourseLayout = async ({
   params,
 }: {
   children: React.ReactNode;
-  params: { courseId: string };
+  params: { courseId: string; productId: string };
 }) => {
   const session = await getSession();
   if (!session) {
@@ -43,12 +43,16 @@ const CourseLayout = async ({
   }
 
   return (
-    <div className="h-full">
-      <div className="h-[80px] fixed inset-x-0 w-full z-50">
+    <div className="h-full w-full">
+      {/* <div className="h-[80px] fixed inset-x-0 w-full z-50">
         <Navbar />
-      </div>
+      </div> */}
       <div className="hidden md:flex h-full w-80 flex-col fixed top-[80px] z-50">
-        <CourseSidebar course={course} progressCount={1} />
+        <CourseSidebar
+          productId={params.productId}
+          course={course}
+          progressCount={1}
+        />
       </div>
       <main className="md:pl-80 pt-[80px] h-full">{children}</main>
     </div>

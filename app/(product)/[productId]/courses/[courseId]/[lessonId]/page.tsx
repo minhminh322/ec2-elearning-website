@@ -12,6 +12,7 @@ const lessonPage = async ({
   params,
 }: {
   params: {
+    productId: string;
     courseId: string;
     lessonId: string;
   };
@@ -26,6 +27,7 @@ const lessonPage = async ({
       userId: (session?.user as User).id,
       lessonId: params.lessonId,
       courseId: params.courseId,
+      productId: params.productId,
     });
 
   if (!lesson || !course) {
