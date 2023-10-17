@@ -36,7 +36,7 @@ export const CourseSidebar = async ({
   });
 
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
+    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold">{course.title}</h1>
         {purchase && (
@@ -53,6 +53,7 @@ export const CourseSidebar = async ({
             label={lesson.title}
             isCompleted={!!lesson.userProgress?.[0]?.isCompleted}
             courseId={course.id}
+            productId={productId}
           />
         ))}
       </div>

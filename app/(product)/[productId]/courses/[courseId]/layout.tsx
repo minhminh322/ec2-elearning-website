@@ -5,6 +5,9 @@ import getSession from "@/actions/getSession";
 import { redirect } from "next/navigation";
 import { User } from "@/lib/interface";
 import { Navbar } from "@/components/navigation/navbar";
+import { getProgress } from "@/actions/getProgress";
+import { use } from "react";
+import getUserId from "@/actions/getUserId";
 
 const CourseLayout = async ({
   children,
@@ -13,8 +16,8 @@ const CourseLayout = async ({
   children: React.ReactNode;
   params: { courseId: string; productId: string };
 }) => {
-  const session = await getSession();
-  if (!session) {
+  const userId = await getUserId();
+  if (!userId) {
     return redirect("/");
   }
 
@@ -27,7 +30,7 @@ const CourseLayout = async ({
         include: {
           userProgress: {
             where: {
-              userId: (session?.user as User).id,
+              userId,
             },
           },
         },
@@ -42,6 +45,7 @@ const CourseLayout = async ({
     return redirect("/");
   }
 
+  const progressCount = await getProgress(userId, params.courseId);
   return (
     <div className="h-full w-full">
       {/* <div className="h-[80px] fixed inset-x-0 w-full z-50">
@@ -51,10 +55,10 @@ const CourseLayout = async ({
         <CourseSidebar
           productId={params.productId}
           course={course}
-          progressCount={1}
+          progressCount={progressCount}
         />
       </div>
-      <main className="md:pl-80 pt-[80px] h-full">{children}</main>
+      <main className="md:pl-80 h-full">{children}</main>
     </div>
   );
 };

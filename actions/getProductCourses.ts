@@ -23,6 +23,16 @@ export const getProductCourses = async ({
       throw new Error("Product not found");
     }
 
+    const product = await db.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
     const courses = await db.course.findMany({
       where: {
         productId: productId,
@@ -30,17 +40,27 @@ export const getProductCourses = async ({
       include: {
         lessons: {
           include: {
-            userProgress: { where: { userId: userId } },
+            video: true,
+            userProgress: {
+              where: {
+                userId,
+              },
+            },
           },
-          orderBy: { position: "asc" },
         },
+      },
+      orderBy: {
+        position: "asc",
       },
     });
 
-    return courses;
+    return { product, courses };
   } catch (error) {
     console.error("[ERROR] getProduct", error);
 
-    return [];
+    return {
+      product: null,
+      courses: null,
+    };
   }
 };

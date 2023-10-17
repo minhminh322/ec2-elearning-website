@@ -13,12 +13,14 @@ interface ProductListProps {
 export const ProductList = ({ products }: ProductListProps) => {
   return (
     <div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
             title={product.name}
+            description={product.description!}
+            courseLength={product.courses.length}
             imageId={product.imageId!}
             price={product.price!}
             progress={product.progress}

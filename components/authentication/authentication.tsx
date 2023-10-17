@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ export default function Authentication() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [message, setMessage] = useState("");
 
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value);
@@ -31,12 +32,10 @@ export default function Authentication() {
 
   function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(`Email: ${email}, Password: ${password}`);
   }
 
   function handleSignUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(`Email: ${email}, Password: ${password}`);
   }
 
   function toggleIsSigningUp() {
@@ -53,20 +52,35 @@ export default function Authentication() {
 
       router.push("/");
     } catch (error) {
-      console.log(error);
+      if ((error as Error).message === "No user found") {
+        setMessage("No user found with that email. Please try again.");
+      } else if ((error as Error).message === "Incorrect password") {
+        setMessage("Incorrect password. Please try again.");
+      } else {
+        console.log(error);
+      }
     }
   }, [email, password, router]);
 
   const register = useCallback(async () => {
     try {
-      const response = await axios.post("/api/register", {
+      await axios.post("/api/register", {
         email,
         password,
       });
 
       login();
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 422) {
+          setMessage("User already exists. Please log in instead.");
+        } else {
+          console.log(error);
+        }
+      } else {
+        console.log(error);
+      }
     }
   }, [email, password, login]);
 
@@ -115,7 +129,7 @@ export default function Authentication() {
           >
             {isSigningUp ? "Sign Up" : "Sign In"}
           </button>
-
+          {message && <p className="text-red-500">{message}</p>}
           <div className="flex flex-row justify-center items-center space-x-2">
             <div
               onClick={() => signIn("google", { callbackUrl: "/" })}

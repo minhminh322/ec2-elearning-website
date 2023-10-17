@@ -5,25 +5,30 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
+import { getProgress } from "@/actions/getProgress";
 
 interface CourseCardProps {
   id: string;
   title: string;
+  description: string;
   imageId: string;
   lessonsLength: number;
   productId: string;
-  progress: number | null;
+  userId: string;
 }
 
-export const CourseCard = ({
+export const CourseCard = async ({
   id,
   title,
+  description,
   imageId,
   lessonsLength,
   productId,
-  progress,
+  userId,
 }: CourseCardProps) => {
   const image_base_url = process.env.CDN_URL + "/images/";
+  const progress = await getProgress(userId, id);
+
   return (
     <Link href={`/${productId}/courses/${id}`}>
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
@@ -39,7 +44,7 @@ export const CourseCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground">Categorizy</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
@@ -48,7 +53,7 @@ export const CourseCard = ({
               </span>
             </div>
           </div>
-          {/* {progress !== null ? (
+          {progress !== null ? (
             <CourseProgress
               variant={progress === 100 ? "success" : "default"}
               size="sm"
@@ -56,9 +61,9 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price)}
+              {/* {formatPrice(price)} */} sth wrong
             </p>
-          )} */}
+          )}
         </div>
       </div>
     </Link>

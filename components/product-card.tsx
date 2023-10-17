@@ -7,6 +7,8 @@ interface ProductCardProps {
   id: string;
   title: string;
   imageId: string;
+  description: string;
+  courseLength: number | null;
   price: number;
   progress: number | null;
 }
@@ -14,6 +16,8 @@ export const ProductCard = ({
   id,
   title,
   imageId,
+  description,
+  courseLength,
   price,
   progress,
 }: ProductCardProps) => {
@@ -33,14 +37,14 @@ export const ProductCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground">Categorizy</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
-            {/* <div className="flex items-center gap-x-1 text-slate-500">
+            <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
-                {chaptersLength} {chaptersLength === 1 ? "Lesson" : "Lessons"}
+                {courseLength} {courseLength === 1 ? "Week" : "Weeks"}
               </span>
-            </div> */}
+            </div>
           </div>
           {/* {progress !== null ? (
             <CourseProgress

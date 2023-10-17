@@ -1,6 +1,6 @@
-// write sign out component here
+"use client";
+
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 export default function SignOut() {

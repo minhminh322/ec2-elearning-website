@@ -8,7 +8,7 @@ export const getProgress = async (
     const publishedLessons = await db.lesson.findMany({
       where: {
         courseId: courseId,
-        isPublished: true,
+        // isPublished: true,
       },
       select: {
         id: true,
@@ -17,7 +17,7 @@ export const getProgress = async (
 
     const publishedLessonIds = publishedLessons.map((lesson) => lesson.id);
 
-    const validCompletedChapters = await db.userProgress.count({
+    const validCompletedLessons = await db.userProgress.count({
       where: {
         userId: userId,
         lessonId: {
@@ -28,9 +28,9 @@ export const getProgress = async (
     });
 
     const progressPercentage =
-      (validCompletedChapters / publishedLessonIds.length) * 100;
+      (validCompletedLessons / publishedLessonIds.length) * 100;
 
-    return progressPercentage;
+    return progressPercentage | 0;
   } catch (error) {
     console.log("[GET_PROGRESS]", error);
     return 0;

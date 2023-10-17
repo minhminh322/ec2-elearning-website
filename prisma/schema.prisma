@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,7 +5,6 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  // relationMode = "prisma"
 }
 
 model User {
@@ -29,11 +25,12 @@ model Product {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   name        String
+  pathName    String?    @unique @default(cuid())
   description String?
   imageId     String?
   price       Float?
-  purchases   Purchase[]
   courses     Course[]
+  purchases   Purchase[]
 }
 
 model Course {
@@ -45,9 +42,10 @@ model Course {
   imageId     String?
   position    Int
   productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   lessons     Lesson[]
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@index([productId], map: "Course_productId_fkey")
 }
 
 model Lesson {
@@ -57,13 +55,14 @@ model Lesson {
   title        String
   description  String?
   position     Int
-  video        Video?
   isPublished  Boolean        @default(false)
   isFree       Boolean        @default(false)
   courseId     String
+  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
   userProgress UserProgress[]
+  video        Video?
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  @@index([courseId], map: "Lesson_courseId_fkey")
 }
 
 model Video {
@@ -71,9 +70,9 @@ model Video {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   playbackId String
+  duration   String   @default("00:00:00")
   lessonId   String   @unique
-
-  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson     Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 }
 
 model UserProgress {
@@ -83,10 +82,10 @@ model UserProgress {
   userId      String
   lessonId    String
   isCompleted Boolean  @default(false)
-
-  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+  @@index([lessonId], map: "UserProgress_lessonId_fkey")
 }
 
 model Purchase {
@@ -95,10 +94,10 @@ model Purchase {
   updatedAt DateTime @updatedAt
   userId    String
   productId String
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
+  @@index([productId], map: "Purchase_productId_fkey")
 }
 
 model Account {
@@ -114,10 +113,10 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
 }
 
 model Session {
@@ -126,6 +125,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
 }
 
 model VerificationToken {

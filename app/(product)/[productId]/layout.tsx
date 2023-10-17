@@ -16,31 +16,6 @@ const ProductLayout = async ({
   if (!session) {
     return redirect("/");
   }
-  // const product = await db.product.findUnique({
-  //   where: {
-  //     id: params.productId,
-  //   },
-  //   include: {
-  //     courses: {
-  //       include: {
-  //         lessons: {
-  //           include: {
-  //             userProgress: {
-  //               where: {
-  //                 userId: (session?.user as User).id,
-  //               },
-  //             },
-  //           },
-  //           orderBy: {
-  //             position: "asc",
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
-
-  // console.log(product);
 
   return (
     <div className="h-full">

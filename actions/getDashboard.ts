@@ -1,5 +1,6 @@
 import { Course, Product } from "@prisma/client";
 import { db } from "@/lib/db";
+import { getProgress } from "./getProgress";
 type ProductWithCourses = Product & {
   courses: Course[];
   progress: number | null;
@@ -31,7 +32,10 @@ export const getDashboard = async (
     ) as ProductWithCourses[];
 
     for (let prod of products) {
-      prod["progress"] = 1;
+      // const progress = await getProgress(userId, );
+      // console.log("prod: ", prod);
+      const progress = 1;
+      prod["progress"] = progress;
     }
 
     const inProgressProducts = products.filter(

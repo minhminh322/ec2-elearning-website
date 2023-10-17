@@ -7,6 +7,9 @@ import { Description } from "@/components/description";
 import { getLesson } from "@/actions/getLesson";
 import { User } from "@/lib/interface";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { getVimeoVideo } from "@/actions/getVimeoVideo";
+import { SourceCodeButton } from "./_components/source-code-button";
+import { NextButton } from "./_components/next-button";
 
 const lessonPage = async ({
   params,
@@ -30,33 +33,85 @@ const lessonPage = async ({
       productId: params.productId,
     });
 
+  const videoMeta = await getVimeoVideo(video?.playbackId ?? "");
+  // console.log(videoMeta);
   if (!lesson || !course) {
     return redirect("/");
   }
+
+  // TODO: embed descriptions from database
   const text = `
-  <h1>Description here</h1>
+  <h1>Description</h1>
+  <p> Updating ... </p>
   `;
-  // console.log(video);
+
+  const sourceCode = `
+  // C program to check whether a number is palindrome or not 
+  #include <stdio.h> 
+    
+  // Driver code 
+  int main() 
+  { 
+      // This is our given number 
+      int original_number = 12321; 
+    
+      // This variable stored reversed digit 
+      int reversed = 0; 
+    
+      int num = original_number; 
+    
+      // Execute a while loop to reverse 
+      // digits of given number 
+      while (num != 0) { 
+          int r = num % 10; 
+          reversed = reversed * 10 + r; 
+          num /= 10; 
+      } 
+    
+      // Compare original_number with 
+      // reversed number 
+      if (original_number == reversed) { 
+          printf(" Given number %d is a palindrome number", 
+                 original_number); 
+      } 
+      else { 
+          printf( 
+              " Given number %d is not a palindrome number", 
+              original_number); 
+      } 
+      
+      return 0; 
+  }
+  `;
   return (
-    <div>
-      <div className="flex flex-col max-w-4xl mx-auto pb-20">
-        <div className="p-4">
-          {/* <h1 className="text-2xl">{lesson?.courseId}</h1> */}
-          {video && <VideoPlayer videoUrl={video.playbackId} />}
+    <div className="flex flex-col items-center justify-center">
+      <div className="w-full p-10">
+        <div className="flex justify-between my-5">
+          <h1 className="text-3xl font-semibold">{lesson?.title}</h1>
+          <h1>10 mins</h1>
         </div>
-        <div>
-          <div className="p-4 flex flex-col md:flex-row items-center justify-between">
-            <h2 className="text-2xl font-semibold mb-2">{lesson?.title}</h2>
+        <div className="">
+          {video && <VideoPlayer videoUrl={videoMeta.link} />}
+        </div>
+
+        <div className="">
+          <div className="flex flex-col md:flex-row items-center justify-between my-5 mx-auto">
+            <div className="flex space-x-3">
+              <CourseProgressButton
+                lessonId={params.lessonId}
+                courseId={params.courseId}
+                isCompleted={!!UserProgress?.isCompleted}
+                nextLessonId={nextLesson?.id ?? null}
+              />
+              <SourceCodeButton sourceCode={sourceCode} />
+            </div>
+            <div className="">
+              <NextButton nextLessonId={nextLesson?.id ?? null} />
+            </div>
             {/* <Button>Mark as complete</Button> or Purchase */}
-            <CourseProgressButton
-              lessonId={params.lessonId}
-              courseId={params.courseId}
-              isCompleted={!!UserProgress?.isCompleted}
-              nextLessonId={nextLesson?.id ?? null}
-            />
           </div>
           <Separator />
-          <div>
+          <div className="my-3">
             <Description value={text} />
           </div>
         </div>

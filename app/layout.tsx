@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import SessionProvider from "@/lib/SessionProvider";
 import getSession from "@/actions/getSession";
 import { ToastProvider } from "@/components/providers/toaster-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,8 +21,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ToastProvider />
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ToastProvider />
+          <SessionProvider session={session}>{children}</SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
