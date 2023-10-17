@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navigation/navbar";
 import { getProgress } from "@/actions/getProgress";
 import { use } from "react";
 import getUserId from "@/actions/getUserId";
+import { getProductCourses } from "@/actions/getProductCourses";
 
 const CourseLayout = async ({
   children,
@@ -21,31 +22,37 @@ const CourseLayout = async ({
     return redirect("/");
   }
 
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      lessons: {
-        include: {
-          userProgress: {
-            where: {
-              userId,
-            },
-          },
-        },
-        orderBy: {
-          position: "asc",
-        },
-      },
-    },
+  // const course = await db.course.findUnique({
+  //   where: {
+  //     id: params.courseId,
+  //   },
+  //   include: {
+  //     lessons: {
+  //       include: {
+  //         userProgress: {
+  //           where: {
+  //             userId,
+  //           },
+  //         },
+  //       },
+  //       orderBy: {
+  //         position: "asc",
+  //       },
+  //     },
+  //   },
+  // });
+
+  const { product, courses } = await getProductCourses({
+    userId: userId,
+    productId: params.productId,
   });
 
-  if (!course) {
+  if (!product) {
     return redirect("/");
   }
 
-  const progressCount = await getProgress(userId, params.courseId);
+  // const progressCount = await getProgress(userId, params.courseId);
+  const progressCount = 1;
   return (
     <div className="h-full w-full">
       {/* <div className="h-[80px] fixed inset-x-0 w-full z-50">
@@ -54,7 +61,8 @@ const CourseLayout = async ({
       <div className="hidden md:flex h-full w-80 flex-col fixed top-[80px] z-50">
         <CourseSidebar
           productId={params.productId}
-          course={course}
+          product={product}
+          courses={courses}
           progressCount={progressCount}
         />
       </div>

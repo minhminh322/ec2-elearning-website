@@ -13,6 +13,13 @@ import Link from "next/link";
 import React from "react";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
+import { Course, Product } from "@prisma/client";
+
+type ProductProps = {
+  id: string;
+  name: string;
+  description: string;
+}[];
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -36,7 +43,7 @@ const components: { title: string; href: string; description: string }[] = [
     description: "Get professional certification from Google",
   },
 ];
-export const NavMainMenu = () => {
+export const NavMainMenu = ({ products }: { products: ProductProps }) => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -52,24 +59,24 @@ export const NavMainMenu = () => {
                   >
                     {/* <Icons.logo className="h-6 w-6" /> */}
                     <Logo logoType="full_brand" />
-                    {/* <div className="mb-2 mt-4 text-lg font-medium">
+                    <div className="mb-2 mt-4 text-lg font-medium">
                       Trai Code
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
                       Elite Coding Camp (EC2)
-                    </p> */}
+                    </p>
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/" title="Course 1">
-                Course 1
-              </ListItem>
-              <ListItem href="/" title="Course 2">
-                Course 2
-              </ListItem>
-              <ListItem href="/" title="Course 3">
-                Course 3
-              </ListItem>
+              {products.map((product) => (
+                <ListItem
+                  href={`/${product.id}`}
+                  title={product.name}
+                  key={product.id}
+                >
+                  {product.description}
+                </ListItem>
+              ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>

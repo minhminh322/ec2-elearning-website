@@ -1,24 +1,28 @@
-import { Course, Lesson, UserProgress } from "@prisma/client";
+import { Course, Lesson, Product, UserProgress, Video } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import getSession from "@/actions/getSession";
 import { db } from "@/lib/db";
 import { User } from "@/lib/interface";
 import { CourseProgress } from "@/components/course-progress";
+import { CourseContent } from "./course-content";
 
 interface CourseSidebarProps {
   productId: string;
-  course: Course & {
+  product: Product;
+  courses: (Course & {
     lessons: (Lesson & {
+      video: Video | null;
       userProgress: UserProgress[] | null;
     })[];
-  };
+  })[];
   progressCount: number;
 }
 
 export const CourseSidebar = async ({
   productId,
-  course,
+  product,
+  courses,
   progressCount,
 }: CourseSidebarProps) => {
   const session = await getSession();
@@ -34,11 +38,12 @@ export const CourseSidebar = async ({
       },
     },
   });
-
+  // console.log("[PRODUCT]");
+  // console.log(product);
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-8 flex flex-col border-b">
-        <h1 className="font-semibold">{course.title}</h1>
+        <h1 className="font-semibold">{product.name}</h1>
         {purchase && (
           <div className="mt-10">
             <CourseProgress variant="success" value={progressCount} />
@@ -46,7 +51,8 @@ export const CourseSidebar = async ({
         )}
       </div>
       <div className="flex flex-col w-full">
-        {course.lessons.map((lesson) => (
+        <CourseContent courses={courses} productId={productId} />
+        {/* {course.lessons.map((lesson) => (
           <CourseSidebarItem
             key={lesson.id}
             id={lesson.id}
@@ -55,19 +61,8 @@ export const CourseSidebar = async ({
             courseId={course.id}
             productId={productId}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
 };
-
-// export const CourseSidebar = ({
-//   course,
-//   progressCount,
-// }: CourseSidebarProps) => {
-//   return (
-//     <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
-//       Sidebar
-//     </div>
-//   );
-// };

@@ -10,6 +10,7 @@ import { CourseProgressButton } from "./_components/course-progress-button";
 import { getVimeoVideo } from "@/actions/getVimeoVideo";
 import { SourceCodeButton } from "./_components/source-code-button";
 import { NextButton } from "./_components/next-button";
+import { formatTime } from "@/lib/format";
 
 const lessonPage = async ({
   params,
@@ -88,7 +89,7 @@ const lessonPage = async ({
       <div className="w-full p-10">
         <div className="flex justify-between my-5">
           <h1 className="text-3xl font-semibold">{lesson?.title}</h1>
-          <h1>10 mins</h1>
+          <h1>{formatTime(videoMeta.duration)} mins</h1>
         </div>
         <div className="">
           {video && <VideoPlayer videoUrl={videoMeta.link} />}

@@ -27,7 +27,7 @@ export const Logo = ({ logoType }: { logoType: LogoProps }) => {
       {logoType === "default" ? (
         <Image src={default_src} alt="Logo" width={90} height={90} />
       ) : (
-        <Image src={full_brand_src} alt="Logo" width={300} height={300} />
+        <Image src={full_brand_src} alt="Logo" width={100} height={100} />
       )}
     </>
   );
