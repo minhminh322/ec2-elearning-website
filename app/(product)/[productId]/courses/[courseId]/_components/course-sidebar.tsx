@@ -1,22 +1,28 @@
-import { Course, Lesson, UserProgress } from "@prisma/client";
+import { Course, Lesson, Product, UserProgress, Video } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import getSession from "@/actions/getSession";
 import { db } from "@/lib/db";
 import { User } from "@/lib/interface";
 import { CourseProgress } from "@/components/course-progress";
+import { CourseContent } from "./course-content";
 
 interface CourseSidebarProps {
-  course: Course & {
+  productId: string;
+  product: Product;
+  courses: (Course & {
     lessons: (Lesson & {
+      video: Video | null;
       userProgress: UserProgress[] | null;
     })[];
-  };
+  })[];
   progressCount: number;
 }
 
 export const CourseSidebar = async ({
-  course,
+  productId,
+  product,
+  courses,
   progressCount,
 }: CourseSidebarProps) => {
   const session = await getSession();
@@ -26,17 +32,18 @@ export const CourseSidebar = async ({
 
   const purchase = await db.purchase.findUnique({
     where: {
-      userId_courseId: {
+      userId_productId: {
         userId: (session?.user as User).id,
-        courseId: course.id,
+        productId: productId,
       },
     },
   });
-
+  // console.log("[PRODUCT]");
+  // console.log(product);
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
+    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-8 flex flex-col border-b">
-        <h1 className="font-semibold">{course.title}</h1>
+        <h1 className="font-semibold">{product.name}</h1>
         {purchase && (
           <div className="mt-10">
             <CourseProgress variant="success" value={progressCount} />
@@ -44,27 +51,18 @@ export const CourseSidebar = async ({
         )}
       </div>
       <div className="flex flex-col w-full">
-        {course.lessons.map((lesson) => (
+        <CourseContent courses={courses} productId={productId} />
+        {/* {course.lessons.map((lesson) => (
           <CourseSidebarItem
             key={lesson.id}
             id={lesson.id}
             label={lesson.title}
             isCompleted={!!lesson.userProgress?.[0]?.isCompleted}
             courseId={course.id}
+            productId={productId}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
 };
-
-// export const CourseSidebar = ({
-//   course,
-//   progressCount,
-// }: CourseSidebarProps) => {
-//   return (
-//     <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
-//       Sidebar
-//     </div>
-//   );
-// };

@@ -1,15 +1,15 @@
 import { Course } from "@prisma/client";
-import { CourseCard } from "./courses-card";
+import { CourseCard } from "./courses-card-grid";
 type CourseWithLesson = Course & {
-  lessons: { id: string }[];
-  progress: number | null;
+  lessons: {}[];
 };
 
 interface CourseListProps {
+  userId: string;
   courses: CourseWithLesson[];
 }
 
-export const CourseList = ({ courses }: CourseListProps) => {
+export const CourseList = ({ courses, userId }: CourseListProps) => {
   return (
     <div>
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
@@ -18,10 +18,11 @@ export const CourseList = ({ courses }: CourseListProps) => {
             key={course.id}
             id={course.id}
             title={course.title}
-            imageUrl={course.imageUrl!}
-            chaptersLength={course.lessons.length}
-            price={course.price!}
-            progress={course.progress}
+            description={course.description!}
+            imageId={course.imageId!}
+            lessonsLength={course.lessons.length}
+            productId={course.productId}
+            userId={userId}
           />
         ))}
       </div>

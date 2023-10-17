@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 
 interface GetLessonProps {
   userId: string;
+  productId: string;
   courseId: string;
   lessonId: string;
 }
@@ -12,13 +13,14 @@ export const getLesson = async ({
   userId,
   courseId,
   lessonId,
+  productId,
 }: GetLessonProps) => {
   try {
     const purchase = await db.purchase.findUnique({
       where: {
-        userId_courseId: {
+        userId_productId: {
           userId,
-          courseId,
+          productId,
         },
       },
     });
@@ -26,9 +28,6 @@ export const getLesson = async ({
     const course = await db.course.findUnique({
       where: {
         id: courseId,
-      },
-      select: {
-        price: true,
       },
     });
 

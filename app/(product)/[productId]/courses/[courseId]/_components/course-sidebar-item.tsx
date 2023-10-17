@@ -9,12 +9,14 @@ interface CourseSidebarItemProps {
   id: string;
   isCompleted: boolean;
   courseId: string;
+  productId: string;
 }
 export const CourseSidebarItem = ({
   label,
   id,
   isCompleted,
   courseId,
+  productId,
 }: CourseSidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -23,14 +25,14 @@ export const CourseSidebarItem = ({
   const Icon = isCompleted ? CheckCircle : PlayCircle;
 
   const onClick = () => {
-    router.push(`/courses/${courseId}/${id}`);
+    router.push(`/${productId}/courses/${courseId}/${id}`);
   };
   return (
     <button
       onClick={onClick}
       type="button"
       className={cn(
-        "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
+        "flex items-center gap-x-2 text-slate-500 dark:text-white text-base font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
         isActive &&
           "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700",
         isCompleted && "text-emerald-700 hover:text-emerald-700",

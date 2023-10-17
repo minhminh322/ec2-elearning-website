@@ -4,3 +4,7 @@ export const formatPrice = (price: number) => {
     currency: "USD",
   }).format(price);
 };
+
+export const formatTime = (seconds: number) => {
+  return Math.ceil(seconds / 60);
+};

@@ -1,38 +1,27 @@
-"use client";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Authentication from "@/components/authentication/authentication";
-import { useSession } from "next-auth/react";
-import SignOut from "../authentication/sign-out";
 import { Button } from "../ui/button";
-export const AuthButton = () => {
-  const { data: session, status } = useSession();
+import { AuthMenu } from "./auth-menu";
+import getSession from "@/actions/getSession";
+import SignOut from "../authentication/sign-out";
+import { AuthDialog } from "./auth-dialog";
+export const AuthButton = async () => {
+  const session = await getSession();
+  const profileButton = (
+    <Avatar>
+      <AvatarImage src={session?.user?.image ?? ""} />
+      <AvatarFallback>?</AvatarFallback>
+    </Avatar>
+  );
+
+  const signInButton = <Button variant="outline">Sign in</Button>;
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="cursor-pointer">
-          {status === "authenticated" ? (
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>?</AvatarFallback>
-            </Avatar>
-          ) : (
-            <Button variant="outline">Sign in</Button>
-          )}
-        </div>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        {status === "authenticated" ? <SignOut /> : <Authentication />}
-      </DialogContent>
-    </Dialog>
+    <div>
+      {session ? (
+        <AuthMenu session={session} triggerButton={profileButton} />
+      ) : (
+        <AuthDialog triggerButton={signInButton} />
+      )}
+    </div>
   );
 };

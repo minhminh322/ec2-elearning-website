@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -24,23 +25,28 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password required");
+        }
         const user = await db.user.findUnique({
           where: {
             email: credentials?.email,
           },
         });
-        if (user && user.password === credentials?.password) {
-          return user;
-        } else {
-          return null;
+
+        if (!user) {
+          throw new Error("No user found");
         }
+
+        const isCorrectPassword = await bcrypt.compare(
+          credentials?.password,
+          user.password || ""
+        );
+        if (!isCorrectPassword) {
+          throw new Error("Incorrect password");
+        }
+
+        return user;
       },
     }),
   ],
