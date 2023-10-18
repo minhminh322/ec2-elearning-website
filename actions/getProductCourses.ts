@@ -47,6 +47,9 @@ export const getProductCourses = async ({
               },
             },
           },
+          orderBy: {
+            position: "asc",
+          },
         },
       },
       orderBy: {

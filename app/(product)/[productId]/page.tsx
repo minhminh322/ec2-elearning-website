@@ -1,4 +1,5 @@
 import { getProductCourses } from "@/actions/getProductCourses";
+import { getProductProgress } from "@/actions/getProductProgress";
 import getUserId from "@/actions/getUserId";
 import { CourseContent } from "@/components/courses-content";
 import { CourseList } from "@/components/courses-list-grid";
@@ -16,12 +17,17 @@ const ProductPage = async ({
   };
 }) => {
   const userId = await getUserId();
-  if (!userId) {
-    return redirect("/");
-  }
+  // if (!userId) {
+  //   return redirect("/");
+  // }
 
   const { product, courses } = await getProductCourses({
-    userId: userId,
+    userId: userId || "",
+    productId: params.productId,
+  });
+
+  const progress = await getProductProgress({
+    userId: userId || "",
     productId: params.productId,
   });
 
@@ -36,7 +42,7 @@ const ProductPage = async ({
           <h1>{product?.name}</h1>
 
           {courses && courses?.length > 0 ? (
-            <CourseContent courses={courses} userId={userId} />
+            <CourseContent courses={courses} userId={userId!} />
           ) : (
             <h2>No courses available this time</h2>
           )}

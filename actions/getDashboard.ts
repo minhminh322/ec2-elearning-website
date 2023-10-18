@@ -1,14 +1,16 @@
 import { Course, Product } from "@prisma/client";
 import { db } from "@/lib/db";
-import { getProgress } from "./getProgress";
+import { getProgress } from "./getCourseProgress";
+import { getProductProgress } from "./getProductProgress";
 type ProductWithCourses = Product & {
   courses: Course[];
   progress: number | null;
 };
 type DashboardProducts = {
   allProducts: ProductWithCourses[];
-  completedProducts: ProductWithCourses[];
-  inProgressProducts: ProductWithCourses[];
+  purchasedProducts: ProductWithCourses[];
+  // completedProducts: ProductWithCourses[];
+  // inProgressProducts: ProductWithCourses[];
 };
 
 export const getDashboard = async (
@@ -25,10 +27,10 @@ export const getDashboard = async (
     })) as ProductWithCourses[];
 
     for (let p of allProducts) {
-      p["progress"] = 0;
+      p["progress"] = await getProductProgress({ userId, productId: p.id });
     }
 
-    const purchasedProducts = await db.purchase.findMany({
+    const purchases = await db.purchase.findMany({
       where: {
         userId,
       },
@@ -41,35 +43,34 @@ export const getDashboard = async (
       },
     });
 
-    const products = purchasedProducts.map(
+    const purchasedProducts = purchases.map(
       (purchase) => purchase.product
     ) as ProductWithCourses[];
 
-    for (let prod of products) {
-      // const progress = await getProgress(userId, );
-      // console.log("prod: ", prod);
-      const progress = 1;
-      prod["progress"] = progress;
-    }
+    // for (let pp of purchasedProducts) {
+    //   pp["progress"] = await getProductProgress({ userId, productId: pp.id });
+    // }
 
-    const inProgressProducts = products.filter(
-      (product) => (product.progress ?? 0) < 100
-    );
-    const completedProducts = products.filter(
-      (product) => product.progress === 100
-    );
+    // const inProgressProducts = products.filter(
+    //   (product) => (product.progress ?? 0) < 100
+    // );
+    // const completedProducts = products.filter(
+    //   (product) => product.progress === 100
+    // );
 
     return {
       allProducts: allProducts,
-      completedProducts: completedProducts,
-      inProgressProducts: inProgressProducts,
+      purchasedProducts: purchasedProducts,
+      // completedProducts: completedProducts,
+      // inProgressProducts: inProgressProducts,
     };
   } catch (error) {
     console.log("[ERROR] getDashboard: ", error);
     return {
       allProducts: [],
-      completedProducts: [],
-      inProgressProducts: [],
+      purchasedProducts: [],
+      // completedProducts: [],
+      // inProgressProducts: [],
     };
   }
 };

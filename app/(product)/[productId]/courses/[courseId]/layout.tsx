@@ -5,10 +5,11 @@ import getSession from "@/actions/getSession";
 import { redirect } from "next/navigation";
 import { User } from "@/lib/interface";
 import { Navbar } from "@/components/navigation/navbar";
-import { getProgress } from "@/actions/getProgress";
+import { getProgress } from "@/actions/getCourseProgress";
 import { use } from "react";
 import getUserId from "@/actions/getUserId";
 import { getProductCourses } from "@/actions/getProductCourses";
+import { getProductProgress } from "@/actions/getProductProgress";
 
 const CourseLayout = async ({
   children,
@@ -22,26 +23,6 @@ const CourseLayout = async ({
     return redirect("/");
   }
 
-  // const course = await db.course.findUnique({
-  //   where: {
-  //     id: params.courseId,
-  //   },
-  //   include: {
-  //     lessons: {
-  //       include: {
-  //         userProgress: {
-  //           where: {
-  //             userId,
-  //           },
-  //         },
-  //       },
-  //       orderBy: {
-  //         position: "asc",
-  //       },
-  //     },
-  //   },
-  // });
-
   const { product, courses } = await getProductCourses({
     userId: userId,
     productId: params.productId,
@@ -52,7 +33,10 @@ const CourseLayout = async ({
   }
 
   // const progressCount = await getProgress(userId, params.courseId);
-  const progressCount = 1;
+  const progressCount = await getProductProgress({
+    userId,
+    productId: params.productId,
+  });
   return (
     <div className="h-full w-full">
       {/* <div className="h-[80px] fixed inset-x-0 w-full z-50">

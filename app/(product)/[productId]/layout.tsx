@@ -11,11 +11,11 @@ const ProductLayout = async ({
   children: React.ReactNode;
   params: { productId: string };
 }) => {
-  const session = await getSession();
+  // const session = await getSession();
 
-  if (!session) {
-    return redirect("/");
-  }
+  // if (!session) {
+  //   return redirect("/");
+  // }
 
   return (
     <div className="h-full">
