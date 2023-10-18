@@ -1,4 +1,5 @@
 import { getProductCourses } from "@/actions/getProductCourses";
+import { getProductProgress } from "@/actions/getProductProgress";
 import getUserId from "@/actions/getUserId";
 import { CourseContent } from "@/components/courses-content";
 import { CourseList } from "@/components/courses-list-grid";
@@ -21,6 +22,11 @@ const ProductPage = async ({
   }
 
   const { product, courses } = await getProductCourses({
+    userId: userId,
+    productId: params.productId,
+  });
+
+  const progress = await getProductProgress({
     userId: userId,
     productId: params.productId,
   });

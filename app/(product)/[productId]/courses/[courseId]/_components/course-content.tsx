@@ -40,7 +40,7 @@ export const CourseContent = ({ courses, productId }: CourseContentProps) => {
           <AccordionContent>
             <ul className="p-2 divide-y divide-gray-200 dark:divide-gray-700">
               {course.lessons.map((lesson) => (
-                <li className="pb-3 sm:pb-4" key={lesson.id}>
+                <li className="" key={lesson.id}>
                   {/* <div className="flex justify-between p-2">
                     <div className="">{lesson.title}</div>
                     <div>{formatTime(lesson?.video?.duration || 0)} mins</div>

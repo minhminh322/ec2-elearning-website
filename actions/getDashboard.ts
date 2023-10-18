@@ -1,6 +1,6 @@
 import { Course, Product } from "@prisma/client";
 import { db } from "@/lib/db";
-import { getProgress } from "./getProgress";
+import { getProgress } from "./getCourseProgress";
 type ProductWithCourses = Product & {
   courses: Course[];
   progress: number | null;

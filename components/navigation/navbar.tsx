@@ -20,7 +20,6 @@ export const Navbar = async () => {
       description: product.description,
     };
   }) as ProductProps;
-  console.log(products);
 
   return (
     <div className="p-4 border-b h-full flex justify-between shadow-sm">
