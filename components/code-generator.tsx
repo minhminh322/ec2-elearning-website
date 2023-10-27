@@ -1,12 +1,11 @@
 "use client";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface CodeGeneratorProps {
   sourceCode: string;
   language: string;
-  style: string;
+  style: any;
 }
 export const CodeGenerator = ({
   sourceCode,
@@ -14,7 +13,11 @@ export const CodeGenerator = ({
   style,
 }: CodeGeneratorProps) => {
   return (
-    <SyntaxHighlighter language={language} style={prism}>
+    <SyntaxHighlighter
+      language={language}
+      style={style}
+      customStyle={{ maxHeight: "80vh", width: "90%" }}
+    >
       {sourceCode}
     </SyntaxHighlighter>
   );
