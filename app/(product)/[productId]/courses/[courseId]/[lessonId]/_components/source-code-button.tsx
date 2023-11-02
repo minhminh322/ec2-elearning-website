@@ -12,8 +12,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useTheme } from "next-themes";
+import {
+  oneLight,
+  oneDark,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const SourceCodeButton = ({ sourceCode }: { sourceCode: string }) => {
+  const { resolvedTheme } = useTheme();
+  let codeStyle, bgColor;
+
+  switch (resolvedTheme) {
+    case "light":
+      codeStyle = oneLight;
+      bgColor = "#fafafa";
+      break;
+    case "dark":
+      codeStyle = oneDark;
+      bgColor = "#282c34";
+      break;
+    default:
+      codeStyle = oneLight;
+      break;
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -24,9 +46,10 @@ export const SourceCodeButton = ({ sourceCode }: { sourceCode: string }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[1000px]">
-        <CodeGenerator sourceCode={sourceCode} language="c" style="" />
+      <DialogContent className="max-w-5xl flex justify-center bg-transparent">
+        <CodeGenerator sourceCode={sourceCode} language="c" style={codeStyle} />
       </DialogContent>
     </Dialog>
   );
 };
+``;
