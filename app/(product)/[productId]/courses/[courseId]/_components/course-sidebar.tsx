@@ -42,7 +42,7 @@ export const CourseSidebar = async ({
   // console.log(product);
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
-      <div className="p-8 flex flex-col border-b">
+      <div className="flex flex-col border-b py-5 pr-5">
         <h1 className="font-semibold">{product.name}</h1>
         {purchase && (
           <div className="mt-10">
@@ -50,7 +50,7 @@ export const CourseSidebar = async ({
           </div>
         )}
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full pr-5">
         <CourseContent courses={courses} productId={productId} />
         {/* {course.lessons.map((lesson) => (
           <CourseSidebarItem

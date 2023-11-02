@@ -22,7 +22,7 @@ const ProductLayout = async ({
       <div className="h-[80px] fixed inset-x-0 w-full z-50">
         <Navbar />
       </div>
-      <main className="pt-[80px] h-full">{children}</main>
+      <main className="pt-[80px] px-5 h-full">{children}</main>
     </div>
   );
 };

@@ -32,7 +32,7 @@ export const CourseContent = ({ courses, productId }: CourseContentProps) => {
       {courses.map((course) => (
         <AccordionItem value={course.id} key={course.id}>
           <AccordionTrigger>
-            <div className="flex flex-col items-start w-full mx-2 space-y-1">
+            <div className="flex flex-col items-start w-full space-y-1">
               <div className="">
                 Week {course.position}. {course.title}
               </div>
@@ -48,7 +48,7 @@ export const CourseContent = ({ courses, productId }: CourseContentProps) => {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <ul className="p-2 divide-y divide-gray-200 dark:divide-gray-700">
+            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {course.lessons.map((lesson) => (
                 <li className="" key={lesson.id}>
                   {/* <div className="flex justify-between p-2">
