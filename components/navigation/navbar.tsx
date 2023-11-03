@@ -22,7 +22,7 @@ export const Navbar = async () => {
   }) as ProductProps;
 
   return (
-    <div className="p-4 border-b h-full flex justify-between shadow-sm">
+    <div className="flex justify-between shadow-sm border-b p-4">
       <div className="ml-3 my-auto cursor-pointer ">
         <Link href="/">
           <Logo logoType="default" />

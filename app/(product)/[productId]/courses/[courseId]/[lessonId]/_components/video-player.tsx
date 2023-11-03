@@ -1,8 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import ReactPlayer from "react-player/vimeo";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
+interface VideoPlayerProps {
+  videoUrl: string;
+  lessonId: string;
+  courseId: string;
+  isCompleted?: boolean;
+  nextLessonId: string | null;
+}
+export const VideoPlayer = ({
+  videoUrl,
+  lessonId,
+  courseId,
+  isCompleted,
+  nextLessonId,
+}: VideoPlayerProps) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const onEnded = async () => {
+    try {
+      setIsLoading(true);
+
+      await axios.put(`/api/courses/${courseId}/${lessonId}/progress`, {
+        isCompleted: true,
+      });
+
+      toast.success("Progress updated");
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="relative aspect-video">
       <ReactPlayer
@@ -10,7 +45,7 @@ export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
         controls
         width="100%"
         height="100%"
-        // className="absolute top-0 left-0"
+        onEnded={onEnded}
       />
       {/* <video className="w-full h-full" controls>
         <source src={videoUrl} type="video/mp4" />

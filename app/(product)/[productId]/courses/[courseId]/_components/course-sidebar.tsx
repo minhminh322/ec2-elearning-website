@@ -1,3 +1,5 @@
+"use client";
+import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Course, Lesson, Product, UserProgress, Video } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
@@ -6,6 +8,8 @@ import { db } from "@/lib/db";
 import { User } from "@/lib/interface";
 import { CourseProgress } from "@/components/course-progress";
 import { CourseContent } from "./course-content";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 interface CourseSidebarProps {
   productId: string;
@@ -19,50 +23,47 @@ interface CourseSidebarProps {
   progressCount: number;
 }
 
-export const CourseSidebar = async ({
+export const CourseSidebar = ({
   productId,
   product,
   courses,
   progressCount,
 }: CourseSidebarProps) => {
-  const session = await getSession();
-  if (!session) {
-    return redirect("/");
-  }
+  const [isOpen, setIsOpen] = useState(true);
 
-  const purchase = await db.purchase.findUnique({
-    where: {
-      userId_productId: {
-        userId: (session?.user as User).id,
-        productId: productId,
-      },
-    },
-  });
-  // console.log("[PRODUCT]");
-  // console.log(product);
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
-      <div className="flex flex-col border-b py-5 pr-5">
-        <h1 className="font-semibold">{product.name}</h1>
-        {purchase && (
-          <div className="mt-10">
+    <aside
+      className={`h-full overflow-y-auto flex flex-col border-r shadow-sm transition-all ${
+        isOpen ? "max-w-xs" : "max-w-[5rem]"
+      }`}
+    >
+      <div className="flex justify-between items-center gap-x-10 p-3">
+        {isOpen && <h1 className="font-semibold">{product.name}</h1>}
+        <div>
+          {isOpen ? (
+            <ArrowLeftCircle
+              className="h-8 w-8 cursor-pointer rounded-full hover:bg-slate-500 hover:text-white transition-all"
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          ) : (
+            <ArrowRightCircle
+              className="h-8 w-8 cursor-pointer rounded-full hover:bg-slate-500 hover:text-white transition-all"
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          )}
+        </div>
+      </div>
+
+      {isOpen && (
+        <>
+          <div className="p-3">
             <CourseProgress variant="success" value={progressCount} />
           </div>
-        )}
-      </div>
-      <div className="flex flex-col w-full pr-5">
-        <CourseContent courses={courses} productId={productId} />
-        {/* {course.lessons.map((lesson) => (
-          <CourseSidebarItem
-            key={lesson.id}
-            id={lesson.id}
-            label={lesson.title}
-            isCompleted={!!lesson.userProgress?.[0]?.isCompleted}
-            courseId={course.id}
-            productId={productId}
-          />
-        ))} */}
-      </div>
-    </div>
+          <div className="p-3">
+            <CourseContent courses={courses} productId={productId} />
+          </div>
+        </>
+      )}
+    </aside>
   );
 };
