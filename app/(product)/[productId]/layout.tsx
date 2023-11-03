@@ -18,11 +18,9 @@ const ProductLayout = async ({
   // }
 
   return (
-    <div className="h-full">
-      <div className="h-[80px] fixed inset-x-0 w-full z-50">
-        <Navbar />
-      </div>
-      <main className="pt-[80px] px-5 h-full">{children}</main>
+    <div className="flex flex-col max-h-screen">
+      <Navbar />
+      <main>{children}</main>
     </div>
   );
 };

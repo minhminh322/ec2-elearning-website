@@ -37,20 +37,16 @@ const CourseLayout = async ({
     userId,
     productId: params.productId,
   });
+
   return (
-    <div className="h-full w-full">
-      {/* <div className="h-[80px] fixed inset-x-0 w-full z-50">
-        <Navbar />
-      </div> */}
-      <div className="hidden md:flex h-full w-80 flex-col fixed top-[80px] z-50">
-        <CourseSidebar
-          productId={params.productId}
-          product={product}
-          courses={courses}
-          progressCount={progressCount}
-        />
-      </div>
-      <main className="md:pl-80 h-full">{children}</main>
+    <div className="grid grid-cols-[0fr,5fr] md:grid-cols-[auto,5fr] flex-grow-1">
+      <CourseSidebar
+        productId={params.productId}
+        product={product}
+        courses={courses}
+        progressCount={progressCount}
+      />
+      <div>{children}</div>
     </div>
   );
 };

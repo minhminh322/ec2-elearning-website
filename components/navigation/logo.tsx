@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 type LogoProps = "default" | "full_brand";
 export const Logo = ({ logoType }: { logoType: LogoProps }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   const { resolvedTheme } = useTheme();
   let default_src, full_brand_src;
-
   switch (resolvedTheme) {
     case "light":
       default_src = "/EC2_Logo_Light.png";
@@ -25,7 +29,7 @@ export const Logo = ({ logoType }: { logoType: LogoProps }) => {
   return (
     <>
       {logoType === "default" ? (
-        <Image src={default_src} alt="Logo" width={90} height={90} />
+        <Image src={default_src} alt="Logo" width={100} height={100} />
       ) : (
         <Image src={full_brand_src} alt="Logo" width={100} height={100} />
       )}
