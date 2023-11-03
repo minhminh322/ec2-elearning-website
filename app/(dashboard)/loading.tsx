@@ -5,7 +5,7 @@ import infinity from "react-useanimations/lib/infinity";
 export default function Loading() {
   return (
     <div className="flex items-center justify-center">
-      <UseAnimations animation={infinity} size={100} />
+      <UseAnimations animation={infinity} size={100} strokeColor="red" />
     </div>
   );
 }
