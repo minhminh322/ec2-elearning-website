@@ -8,7 +8,7 @@ export default async function Dashboard() {
   const userId = await getUserId();
 
   const { allProducts, purchasedProducts } = await getDashboard(userId || "");
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   return (
     <div className="max-h-full max-w-5xl mx-auto">
       <div className="space-y-4">

@@ -2,7 +2,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { AuthMenu } from "./auth-menu";
-import SignOut from "../authentication/sign-out";
 import { AuthDialog } from "./auth-dialog";
 import { useSession } from "next-auth/react";
 export const AuthButton = () => {
