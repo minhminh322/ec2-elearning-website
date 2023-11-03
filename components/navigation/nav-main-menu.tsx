@@ -99,7 +99,7 @@ export const NavMainMenu = ({ products }: { products: ProductProps }) => {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/docs" legacyBehavior passHref>
+          <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Roadmap
             </NavigationMenuLink>
