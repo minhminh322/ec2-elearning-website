@@ -6,7 +6,7 @@ import getUserId from "@/actions/getUserId";
 import { ProductList } from "@/components/product-list";
 export default async function Dashboard() {
   const userId = await getUserId();
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
+
   const { allProducts, purchasedProducts } = await getDashboard(userId || "");
 
   return (

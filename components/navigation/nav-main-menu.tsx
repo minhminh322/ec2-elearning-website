@@ -13,7 +13,6 @@ import Link from "next/link";
 import React from "react";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
-import { Course, Product } from "@prisma/client";
 
 type ProductProps = {
   id: string;

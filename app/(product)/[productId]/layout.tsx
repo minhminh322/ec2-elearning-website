@@ -1,8 +1,10 @@
 import getSession from "@/actions/getSession";
+import Loading from "@/app/(dashboard)/loading";
 import { Navbar } from "@/components/navigation/navbar";
 import { db } from "@/lib/db";
 import { User } from "@/lib/interface";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const ProductLayout = async ({
   children,
@@ -20,7 +22,9 @@ const ProductLayout = async ({
   return (
     <div className="flex flex-col max-h-screen">
       <Navbar />
-      <main>{children}</main>
+      <Suspense fallback={<Loading />}>
+        <main>{children}</main>
+      </Suspense>
     </div>
   );
 };

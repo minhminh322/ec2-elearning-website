@@ -17,10 +17,6 @@ const ProductPage = async ({
   };
 }) => {
   const userId = await getUserId();
-  // if (!userId) {
-  //   return redirect("/");
-  // }
-
   const { product, courses } = await getProductCourses({
     userId: userId || "",
     productId: params.productId,
@@ -30,7 +26,7 @@ const ProductPage = async ({
     userId: userId || "",
     productId: params.productId,
   });
-
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const image_base_url = process.env.CDN_URL + "/images/";
   return (
     <div

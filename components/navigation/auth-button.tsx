@@ -1,11 +1,11 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { AuthMenu } from "./auth-menu";
-import getSession from "@/actions/getSession";
-import SignOut from "../authentication/sign-out";
 import { AuthDialog } from "./auth-dialog";
-export const AuthButton = async () => {
-  const session = await getSession();
+import { useSession } from "next-auth/react";
+export const AuthButton = () => {
+  const { data: session, status } = useSession();
   const profileButton = (
     <Avatar>
       <AvatarImage src={session?.user?.image ?? ""} />
