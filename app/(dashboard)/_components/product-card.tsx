@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IconBadge } from "./icon-badge";
+import { IconBadge } from "../../../components/icon-badge";
 import { Calendar } from "lucide-react";
-import { CourseProgress } from "./course-progress";
+import { CourseProgress } from "../../../components/course-progress";
 import { formatPrice } from "@/lib/format";
 
 interface ProductCardProps {

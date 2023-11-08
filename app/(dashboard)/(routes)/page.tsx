@@ -3,7 +3,7 @@ import getSession from "@/actions/getSession";
 import { redirect } from "next/navigation";
 import { getDashboard } from "@/actions/getDashboard";
 import getUserId from "@/actions/getUserId";
-import { ProductList } from "@/components/product-list";
+import { ProductList } from "@/app/(dashboard)/_components/product-list";
 export default async function Dashboard() {
   const userId = await getUserId();
 

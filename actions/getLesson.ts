@@ -37,32 +37,27 @@ export const getLesson = async ({
       },
     });
 
-    let video = null;
-    let nextLesson: Lesson | null = null;
-
     if (!lesson || !course || !purchase) {
       throw new Error("Lesson not found");
     }
 
-    if (purchase) {
-      video = await db.video.findUnique({
-        where: {
-          lessonId: lessonId,
-        },
-      });
+    const video = await db.video.findUnique({
+      where: {
+        lessonId: lessonId,
+      },
+    });
 
-      nextLesson = await db.lesson.findFirst({
-        where: {
-          courseId: courseId,
-          position: {
-            gt: lesson?.position,
-          },
+    const nextLesson = await db.lesson.findFirst({
+      where: {
+        courseId: courseId,
+        position: {
+          gt: lesson?.position,
         },
-        orderBy: {
-          position: "asc",
-        },
-      });
-    }
+      },
+      orderBy: {
+        position: "asc",
+      },
+    });
 
     const UserProgress = await db.userProgress.findUnique({
       where: {

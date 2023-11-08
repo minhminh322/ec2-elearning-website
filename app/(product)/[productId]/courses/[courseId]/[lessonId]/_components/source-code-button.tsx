@@ -46,7 +46,7 @@ export const SourceCodeButton = ({ sourceCode }: { sourceCode: string }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-5xl flex justify-center bg-transparent">
+      <DialogContent className="max-w-5xl flex justify-center">
         <CodeGenerator sourceCode={sourceCode} language="c" style={codeStyle} />
       </DialogContent>
     </Dialog>
