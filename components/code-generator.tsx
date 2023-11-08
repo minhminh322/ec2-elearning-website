@@ -16,7 +16,7 @@ export const CodeGenerator = ({
     <SyntaxHighlighter
       language={language}
       style={style}
-      customStyle={{ maxHeight: "80vh", width: "90%" }}
+      customStyle={{ maxHeight: "80vh", width: "100%" }}
     >
       {sourceCode}
     </SyntaxHighlighter>

@@ -55,6 +55,7 @@ model Lesson {
   title        String
   description  String?
   position     Int
+  pathName     String?
   isPublished  Boolean        @default(false)
   isFree       Boolean        @default(false)
   courseId     String
@@ -72,7 +73,7 @@ model Video {
   playbackId String
   duration   Int      @default(0)
   lessonId   String   @unique
-  lesson     Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson     Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 }
 
 model UserProgress {
