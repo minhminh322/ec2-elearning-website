@@ -47,9 +47,6 @@ export const VideoPlayer = ({
         height="100%"
         onEnded={onEnded}
       />
-      {/* <video className="w-full h-full" controls>
-        <source src={videoUrl} type="video/mp4" />
-      </video> */}
     </div>
   );
 };

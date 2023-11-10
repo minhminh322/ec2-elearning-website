@@ -1,4 +1,5 @@
 import { Lesson } from "@prisma/client";
+import { sanitize, isSupported } from "isomorphic-dompurify";
 
 function b64DecodeUnicode(str: string) {
   return decodeURIComponent(
@@ -35,7 +36,10 @@ export const getLessonNote = async (lesson: Lesson) => {
     // Decode utf-8 instead of atob base64 string
     const htmlString = b64DecodeUnicode(data.content);
 
-    return htmlString;
+    // Sanitize html string
+    const sanitizedHtmlString = sanitize(htmlString);
+
+    return sanitizedHtmlString;
   } catch (error) {
     throw new Error(`Could not get note: ${error}`);
   }

@@ -58,7 +58,7 @@ const lessonPage = async ({
             <h1>{formatTime(videoMeta.duration)} mins</h1>
           </div>
         </div>
-        <div className="">
+        <div className="max-w-5xl mx-auto">
           {video && (
             <VideoPlayer
               videoUrl={videoMeta.link}
@@ -78,7 +78,7 @@ const lessonPage = async ({
               isCompleted={!!UserProgress?.isCompleted}
               nextLessonId={nextLesson?.id ?? null}
             />
-            <SourceCodeButton sourceCode={sourceCode!} />
+            {sourceCode && <SourceCodeButton sourceCode={sourceCode!} />}
           </div>
           <div className="">
             <NextButton nextLessonId={nextLesson?.id ?? null} />
@@ -90,6 +90,7 @@ const lessonPage = async ({
         <LeetcodeTable />
         <div className="text-2xl font-semibold my-3">Lecture Note</div>
         <div className="my-3">
+          {/* <div dangerouslySetInnerHTML={{ __html: note! }} /> */}
           <Description value={note!} />
         </div>
       </div>
