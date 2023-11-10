@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import SessionProvider from "@/lib/SessionProvider";
 import getSession from "@/actions/getSession";
 import { ToastProvider } from "@/components/providers/toaster-provider";
@@ -20,6 +21,17 @@ export default async function RootLayout({
   const session = await getSession();
   return (
     <html lang="en">
+      {/* <!-- Google tag (gtag.js) --> */}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+      />
+      <Script id="google-analytics">
+        {`window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');`}
+      </Script>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ToastProvider />
