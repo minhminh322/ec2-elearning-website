@@ -10,23 +10,19 @@ function b64DecodeUnicode(str: string) {
       .join("")
   );
 }
-export const getLessonNote = async (lesson: Lesson) => {
-  const base_path =
-    "https://api.github.com/repos/minhminh322/CS50x-Solution/contents";
+export const getLessonNote = async (courseName: string, lesson: Lesson) => {
+  const base_path = `https://api.github.com/repos/minhminh322/${courseName}/contents`;
 
   try {
     if (!lesson.pathName) {
       return null;
     }
     const file = lesson.pathName.split("/")[1];
-    const response = await fetch(
-      `${base_path}/${lesson.pathName}/${file}.html`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-        },
-      }
-    );
+    const response = await fetch(`${base_path}/${lesson.pathName}/${file}.md`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+      },
+    });
 
     const data = await response.json();
 

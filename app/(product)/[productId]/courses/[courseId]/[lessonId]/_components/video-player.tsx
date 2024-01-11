@@ -26,7 +26,7 @@ export const VideoPlayer = ({
     try {
       setIsLoading(true);
 
-      await axios.put(`/api/courses/${courseId}/${lessonId}/progress`, {
+      await axios.put(`/api/courses/${courseId}/${lessonId}/userProgress`, {
         isCompleted: true,
       });
 
@@ -40,13 +40,23 @@ export const VideoPlayer = ({
   };
   return (
     <div className="relative aspect-video">
-      <ReactPlayer
-        url={videoUrl}
-        controls
-        width="100%"
-        height="100%"
-        onEnded={onEnded}
-      />
+      {videoUrl.includes("895596196") ? (
+        <ReactPlayer
+          url={videoUrl}
+          loop={true}
+          playing={true}
+          width="100%"
+          height="100%"
+        />
+      ) : (
+        <ReactPlayer
+          url={videoUrl}
+          controls
+          width="100%"
+          height="100%"
+          onEnded={onEnded}
+        />
+      )}
     </div>
   );
 };

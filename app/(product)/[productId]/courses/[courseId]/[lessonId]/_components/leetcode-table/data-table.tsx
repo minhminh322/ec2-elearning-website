@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  RowSelectionState,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -15,7 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -26,7 +29,10 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = useState({});
+  // const [initialRowSelection, setInitialRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState({} as RowSelectionState);
+  const firstInitRender = useRef(true);
+  const first2RowRender = useRef(0);
 
   const table = useReactTable({
     data,
@@ -36,8 +42,60 @@ export function DataTable<TData, TValue>({
     state: {
       rowSelection,
     },
+    // initialState: {
+    //   rowSelection,
+    // },
+    debugTable: true,
   });
 
+  useEffect(() => {
+    if (firstInitRender.current) {
+      firstInitRender.current = false;
+      return;
+    }
+    const fetchInitialRowSelection = () => {
+      // console.log("Fetching initial row selection", data);
+      const initialRowSelection = {} as any;
+      for (let i = 0; i < data.length; i++) {
+        initialRowSelection[i] = (data[i] as any)["progress"];
+      }
+      console.log("Initial row selection", initialRowSelection);
+      setRowSelection(initialRowSelection);
+    };
+    fetchInitialRowSelection();
+  }, []);
+  async function updateProgress(index: number, updatedRow: boolean) {
+    axios
+      .put(`/api/courses/problems/${(data[index] as any)["id"]}/userProgress`, {
+        isCompleted: !!updatedRow,
+      })
+      .then((res) => {
+        (data[index] as any)["progress"] = !!updatedRow;
+        toast.success("Progress updated");
+        console.log("Updated Leetcode progress", data[index]);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Failed to update progress");
+      });
+  }
+  useEffect(() => {
+    if (first2RowRender.current < 2) {
+      first2RowRender.current += 1;
+      return;
+    }
+
+    const fetchData = async () => {
+      table.getRowModel().rows?.forEach(async (row) => {
+        const updatedRow = row.getIsSelected();
+        const originalRow = (data[row.index] as any)["progress"];
+        if (updatedRow !== originalRow) {
+          await updateProgress(row.index, updatedRow);
+        }
+      });
+    };
+    fetchData();
+  }, [rowSelection]);
   return (
     <div className="rounded-md border">
       <Table>
@@ -76,7 +134,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {/* No results. */}
               </TableCell>
             </TableRow>
           )}

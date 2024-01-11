@@ -49,21 +49,36 @@ model Course {
 }
 
 model Lesson {
-  id           String         @id @default(uuid())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  title        String
-  description  String?
-  position     Int
-  pathName     String?
-  isPublished  Boolean        @default(false)
-  isFree       Boolean        @default(false)
-  courseId     String
-  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  userProgress UserProgress[]
-  video        Video?
+  id               String            @id @default(uuid())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  title            String
+  type             LessonType?       @default(Lecture)
+  position         Int
+  pathName         String?
+  isPublished      Boolean           @default(false)
+  isFree           Boolean           @default(false)
+  courseId         String
+  course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userProgress     UserProgress[]
+  practiceProblems PracticeProblem[]
+  video            Video?
 
   @@index([courseId], map: "Lesson_courseId_fkey")
+}
+
+model PracticeProblem {
+  id           String                        @id @default(uuid())
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  problemName  String
+  solution     String?
+  difficulty   Difficulty                    @default(Easy)
+  lessonId     String
+  lesson       Lesson                        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  UserProgress UserPracticeProblemProgress[]
+
+  @@index([lessonId], map: "PracticeProblem_lessonId_fkey")
 }
 
 model Video {
@@ -87,6 +102,19 @@ model UserProgress {
 
   @@unique([userId, lessonId])
   @@index([lessonId], map: "UserProgress_lessonId_fkey")
+}
+
+model UserPracticeProblemProgress {
+  id              String          @id @default(uuid())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  userId          String
+  problemId       String
+  isCompleted     Boolean         @default(false)
+  PracticeProblem PracticeProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId])
+  @@index([problemId], map: "UserPracticeProblemProgress_problemId_fkey")
 }
 
 model Purchase {
@@ -136,4 +164,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+enum LessonType {
+  Lecture
+  Exercise
+  Note
+  Optional
 }

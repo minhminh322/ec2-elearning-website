@@ -60,6 +60,7 @@ export const CourseContent = ({ courses, productId }: CourseContentProps) => {
                     id={lesson.id}
                     label={lesson.title}
                     isCompleted={!!lesson.userProgress?.[0]?.isCompleted}
+                    type={lesson.type}
                     courseId={course.id}
                     productId={productId}
                   />

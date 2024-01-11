@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { VideoPlayer } from "./_components/video-player";
 import getSession from "@/actions/getSession";
-import { db } from "@/lib/db";
 import { Separator } from "@/components/ui/separator";
 import { Description } from "@/components/description";
 import { getLesson } from "@/actions/getLesson";
@@ -14,7 +13,9 @@ import { formatTime } from "@/lib/format";
 import { Clock10 } from "lucide-react";
 import { getSourceCode } from "@/actions/getSourceCode";
 import { getLessonNote } from "@/actions/getLessonNote";
-import LeetcodeTable from "./_components/leetcode-table";
+import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
+import { getPracticeProblem } from "@/actions/getPracticeProblem";
+import { MarkdownNote } from "./_components/markdown-note";
 
 const lessonPage = async ({
   params,
@@ -38,36 +39,42 @@ const lessonPage = async ({
       productId: params.productId,
     });
 
-  const videoMeta = await getVimeoVideo(video?.playbackId ?? "");
+  // Default video "Available Soon"
+  const videoMeta = await getVimeoVideo(video?.playbackId ?? "895596196");
   // console.log(videoMeta);
   if (!lesson || !course) {
     return redirect("/");
   }
 
-  const sourceCode = await getSourceCode(lesson);
+  const { problems } = await getPracticeProblem({
+    userId: (session?.user as User).id,
+    lesson: lesson,
+  });
 
-  const note = await getLessonNote(lesson);
+  const codeBase = await getSourceCode("DSA-Course", lesson);
+
+  const note = await getLessonNote("DSA-Course", lesson);
 
   return (
-    <div className="flex flex-col items-center justify-center overflow-y-auto">
+    <div className="flex flex-col items-center overflow-y-auto">
       <div className="w-full p-7">
         <div className="flex justify-between my-5">
           <h1 className="text-4xl font-bold">{lesson?.title}</h1>
-          <div className="flex items-center">
-            <Clock10 className="h-6 w-6 mr-2" />
-            <h1>{formatTime(videoMeta.duration)} mins</h1>
-          </div>
+          {video && (
+            <div className="flex items-center">
+              <Clock10 className="h-6 w-6 mr-2" />
+              <h1>{formatTime(videoMeta.duration)} mins</h1>
+            </div>
+          )}
         </div>
         <div className="max-w-5xl mx-auto">
-          {video && (
-            <VideoPlayer
-              videoUrl={videoMeta.link}
-              lessonId={params.lessonId}
-              courseId={params.courseId}
-              isCompleted={!!UserProgress?.isCompleted}
-              nextLessonId={nextLesson?.id ?? null}
-            />
-          )}
+          <VideoPlayer
+            videoUrl={videoMeta.link}
+            lessonId={params.lessonId}
+            courseId={params.courseId}
+            isCompleted={!!UserProgress?.isCompleted}
+            nextLessonId={nextLesson?.id ?? null}
+          />
         </div>
 
         <div className="flex items-center justify-between my-5 mx-auto">
@@ -78,7 +85,7 @@ const lessonPage = async ({
               isCompleted={!!UserProgress?.isCompleted}
               nextLessonId={nextLesson?.id ?? null}
             />
-            {sourceCode && <SourceCodeButton sourceCode={sourceCode!} />}
+            {codeBase && <SourceCodeButton codeBase={codeBase} />}
           </div>
           <div className="">
             <NextButton nextLessonId={nextLesson?.id ?? null} />
@@ -86,12 +93,18 @@ const lessonPage = async ({
           {/* <Button>Mark as complete</Button> or Purchase */}
         </div>
         <Separator />
-        <div className="text-2xl font-semibold my-3">Similar Problems</div>
-        <LeetcodeTable />
-        <div className="text-2xl font-semibold my-3">Lecture Note</div>
+        {problems.length > 0 && (
+          <>
+            <div className="text-2xl font-semibold my-3">Practice Problems</div>
+            <LeetcodeTable problems={problems} />
+          </>
+        )}
+
+        {/* <div className="text-2xl font-semibold my-3">Lecture Note</div> */}
         <div className="my-3">
           {/* <div dangerouslySetInnerHTML={{ __html: note! }} /> */}
-          <Description value={note!} />
+          {/* <Description value={note!} /> */}
+          <MarkdownNote value={note!} />
         </div>
       </div>
     </div>

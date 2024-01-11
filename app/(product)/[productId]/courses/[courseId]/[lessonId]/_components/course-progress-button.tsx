@@ -28,7 +28,7 @@ export const CourseProgressButton = ({
     try {
       setIsLoading(true);
 
-      await axios.put(`/api/courses/${courseId}/${lessonId}/progress`, {
+      await axios.put(`/api/courses/${courseId}/${lessonId}/userProgress`, {
         isCompleted: !isCompleted,
       });
 

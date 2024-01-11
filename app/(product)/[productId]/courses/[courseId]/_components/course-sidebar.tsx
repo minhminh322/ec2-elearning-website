@@ -2,7 +2,6 @@
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Course, Lesson, Product, UserProgress, Video } from "@prisma/client";
 import { redirect } from "next/navigation";
-import { CourseSidebarItem } from "./course-sidebar-item";
 import getSession from "@/actions/getSession";
 import { db } from "@/lib/db";
 import { User } from "@/lib/interface";

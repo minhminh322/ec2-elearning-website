@@ -46,7 +46,7 @@ const CourseLayout = async ({
         courses={courses}
         progressCount={progressCount}
       />
-      <div>{children}</div>
+      {children}
     </div>
   );
 };
