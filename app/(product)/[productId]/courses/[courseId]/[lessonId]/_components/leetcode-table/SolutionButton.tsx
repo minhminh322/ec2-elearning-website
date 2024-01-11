@@ -17,9 +17,14 @@ import {
   oneLight,
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useState, useEffect } from "react";
 
 export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   let codeStyle, bgColor;
 
   switch (resolvedTheme) {

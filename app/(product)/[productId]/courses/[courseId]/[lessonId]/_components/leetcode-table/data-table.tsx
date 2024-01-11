@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
       for (let i = 0; i < data.length; i++) {
         initialRowSelection[i] = (data[i] as any)["progress"];
       }
-      console.log("Initial row selection", initialRowSelection);
+      // console.log("Initial row selection", initialRowSelection);
       setRowSelection(initialRowSelection);
     };
     fetchInitialRowSelection();

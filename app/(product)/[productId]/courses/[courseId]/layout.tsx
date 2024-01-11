@@ -1,15 +1,15 @@
 import { db } from "@/lib/db";
 import { CourseSidebar } from "./_components/course-sidebar";
-import { CourseNavbar } from "./_components/course-navbar";
 import getSession from "@/actions/getSession";
 import { redirect } from "next/navigation";
 import { User } from "@/lib/interface";
 import { Navbar } from "@/components/navigation/navbar";
 import { getProgress } from "@/actions/getCourseProgress";
-import { use } from "react";
+import { Suspense, use } from "react";
 import getUserId from "@/actions/getUserId";
 import { getProductCourses } from "@/actions/getProductCourses";
 import { getProductProgress } from "@/actions/getProductProgress";
+import Loading from "@/app/(dashboard)/loading";
 
 const CourseLayout = async ({
   children,
@@ -46,7 +46,7 @@ const CourseLayout = async ({
         courses={courses}
         progressCount={progressCount}
       />
-      {children}
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </div>
   );
 };

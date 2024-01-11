@@ -44,6 +44,7 @@ export const getPracticeProblem = async ({
       }
 
       const problemId = p.problemName
+        .replace(" - ", " ")
         .split(" ")
         .map((str) => str.toLowerCase())
         .join("-");

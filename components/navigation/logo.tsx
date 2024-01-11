@@ -7,10 +7,10 @@ import { useState, useEffect } from "react";
 type LogoProps = "default" | "full_brand";
 export const Logo = ({ logoType }: { logoType: LogoProps }) => {
   const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
-  const { resolvedTheme } = useTheme();
   let default_src, full_brand_src;
   switch (resolvedTheme) {
     case "light":
@@ -22,7 +22,7 @@ export const Logo = ({ logoType }: { logoType: LogoProps }) => {
       full_brand_src = "/EC2_Full_Brand_Dark.png";
       break;
     default:
-      default_src = "/EC2_Logo_Light.png";
+      default_src = "/EC2_Logo_Dark.png";
       full_brand_src = "/EC2_Full_Brand_Light.png";
       break;
   }

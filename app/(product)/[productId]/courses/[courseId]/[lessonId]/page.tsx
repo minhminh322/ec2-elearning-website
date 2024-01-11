@@ -55,6 +55,10 @@ const lessonPage = async ({
 
   const note = await getLessonNote("DSA-Course", lesson);
 
+  // const delay = (ms: number) =>
+  //   new Promise((resolve) => setTimeout(resolve, ms));
+  // await delay(5000); // delay for 5 seconds
+
   return (
     <div className="flex flex-col items-center overflow-y-auto">
       <div className="w-full p-7">
