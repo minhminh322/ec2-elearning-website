@@ -19,13 +19,19 @@ import {
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CSSProperties } from "react";
+import { useState, useEffect } from "react";
 
 export const SourceCodeButton = ({
   codeBase,
 }: {
   codeBase: { [key: string]: string };
 }) => {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   let codeStyle: { [x: string]: CSSProperties }, bgColor;
 
   switch (resolvedTheme) {

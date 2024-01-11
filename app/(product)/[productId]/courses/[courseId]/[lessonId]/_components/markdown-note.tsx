@@ -9,9 +9,14 @@ import {
   oneLight,
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useState, useEffect } from "react";
 
 export const MarkdownNote = ({ value }: { value: string }) => {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   let codeStyle: { [key: string]: React.CSSProperties }, bgColor: string;
 
   switch (resolvedTheme) {
@@ -27,13 +32,6 @@ export const MarkdownNote = ({ value }: { value: string }) => {
       codeStyle = oneLight;
       break;
   }
-  const tet = `## Overview
-
-  * Follows [CommonMark](https://commonmark.org)
-  * Optionally follows [GitHub Flavored Markdown](https://github.github.com/gfm/)
-  * Renders actual React elements instead of using \`dangerouslySetInnerHTML\`
-  * Lets you define your own components (to render \`MyHeading\` instead of \`'h1'\`)
-  * Has a lot of plugins`;
 
   return (
     <div style={{ whiteSpace: "pre-wrap" }}>

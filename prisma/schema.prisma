@@ -87,7 +87,7 @@ model Video {
   updatedAt  DateTime @updatedAt
   playbackId String
   duration   Int      @default(0)
-  lessonId   String   @unique
+  lessonId   String?  @unique
   lesson     Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 }
 
