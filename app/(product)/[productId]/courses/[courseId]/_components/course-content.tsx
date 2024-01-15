@@ -7,9 +7,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
 import { formatTime } from "@/lib/format";
 import { CourseItem } from "./course-item";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface CourseContentProps {
   productId: string;
@@ -22,17 +25,31 @@ interface CourseContentProps {
 }
 export const CourseContent = ({ courses, productId }: CourseContentProps) => {
   //   console.log(courses);
+  const pathName = usePathname();
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    // console.log(pathName.split("/")[3]);
+    setValue(pathName.split("/")[3]);
+  }, [pathName]);
   return (
     <Accordion
       type="single"
       collapsible
-      defaultValue={courses[0].id}
+      // defaultValue={courses[0].id}
+      value={value}
+      onValueChange={setValue}
       className="w-full"
     >
       {courses.map((course) => (
         <AccordionItem value={course.id} key={course.id}>
           <AccordionTrigger>
-            <div className="flex flex-col items-start w-full space-y-1">
+            <div
+              className={cn(
+                "flex flex-col items-start w-full space-y-1 transform transition-transform duration-200 hover:translate-x-[10px] hover:scale-105",
+                pathName?.includes(course.id) && "font-bold text-lg"
+              )}
+            >
               <div className="">
                 Week {course.position}. {course.title}
               </div>
