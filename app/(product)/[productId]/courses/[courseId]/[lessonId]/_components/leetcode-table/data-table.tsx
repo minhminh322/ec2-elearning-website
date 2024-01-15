@@ -3,6 +3,8 @@
 import {
   ColumnDef,
   RowSelectionState,
+  SortingState,
+  getSortedRowModel,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -30,6 +32,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   // const [initialRowSelection, setInitialRowSelection] = useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({} as RowSelectionState);
   const firstInitRender = useRef(true);
   const first2RowRender = useRef(0);
@@ -39,8 +42,11 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       rowSelection,
+      sorting,
     },
     // initialState: {
     //   rowSelection,

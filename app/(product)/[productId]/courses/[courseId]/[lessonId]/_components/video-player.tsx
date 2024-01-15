@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import ReactPlayer from "react-player/vimeo";
+import { Suspense, useState, lazy } from "react";
+// import ReactPlayer from "react-player/vimeo";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+const ReactPlayer = lazy(() => import("react-player/vimeo"));
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -39,24 +40,26 @@ export const VideoPlayer = ({
     }
   };
   return (
-    <div className="relative aspect-video">
-      {videoUrl.includes("895596196") ? (
-        <ReactPlayer
-          url={videoUrl}
-          loop={true}
-          playing={true}
-          width="100%"
-          height="100%"
-        />
-      ) : (
-        <ReactPlayer
-          url={videoUrl}
-          controls
-          width="100%"
-          height="100%"
-          onEnded={onEnded}
-        />
-      )}
-    </div>
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <div className="relative aspect-video">
+        {videoUrl.includes("895596196") ? (
+          <ReactPlayer
+            url={videoUrl}
+            loop={true}
+            playing={true}
+            width="100%"
+            height="100%"
+          />
+        ) : (
+          <ReactPlayer
+            url={videoUrl}
+            controls
+            width="100%"
+            height="100%"
+            onEnded={onEnded}
+          />
+        )}
+      </div>
+    </Suspense>
   );
 };

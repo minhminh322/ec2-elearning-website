@@ -57,13 +57,18 @@ export const MarkdownNote = ({ value }: { value: string }) => {
               </code>
             );
           },
-          ol: (props) => (
-            <ol className="list-decimal list-inside" {...props}>
-              {props.children}
-            </ol>
-          ),
+          // p: (props) => (
+          //   <p className="inline" {...props}>
+          //     {props.children}
+          //   </p>
+          // ),
+          // ol: (props) => (
+          //   <ol className="list-decimal list-inside" {...props}>
+          //     {props.children}
+          //   </ol>
+          // ),
           ul: (props) => (
-            <ul className="list-disc list-inside" {...props}>
+            <ul className="list-outside list-none" {...props}>
               {props.children}
             </ul>
           ),
@@ -76,9 +81,10 @@ export const MarkdownNote = ({ value }: { value: string }) => {
             <blockquote
               style={{
                 backgroundColor: `${bgColor}`,
-                borderLeft: "5px solid #ddd",
+                borderLeft: "3px solid #01ff70",
                 margin: "0 0 1em 0",
                 padding: "0.5em 1em",
+                pageBreakInside: "avoid",
               }}
               {...props}
             >

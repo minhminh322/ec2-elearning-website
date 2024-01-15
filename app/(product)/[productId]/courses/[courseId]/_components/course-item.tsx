@@ -43,7 +43,7 @@ export const CourseItem = ({
       onClick={onClick}
       type="button"
       className={cn(
-        "flex items-center w-full gap-x-2 rounded-r-lg text-slate-500 dark:text-white text-base font-[500] transition-all hover:text-slate-600 hover:bg-slate-300/20",
+        "flex items-center w-full gap-x-2 rounded-r-lg text-slate-500 dark:text-white text-base font-[500] hover:text-slate-600 hover:bg-slate-300/20 transform transition-transform duration-200 hover:translate-x-[10px] hover:scale-105",
         isActive &&
           "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700",
         isCompleted && "text-emerald-700 hover:text-emerald-700",

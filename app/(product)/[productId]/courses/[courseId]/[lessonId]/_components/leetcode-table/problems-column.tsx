@@ -6,6 +6,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { SolutionButton } from "./SolutionButton";
 import { Badge } from "@/components/ui/badge";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export type LeetcodeProblem = {
   id: string;
@@ -54,7 +56,17 @@ export const columns: ColumnDef<LeetcodeProblem>[] = [
   },
   {
     accessorKey: "difficulty",
-    header: "Difficulty",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Difficulty
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const difficulty = row.getValue(
         "difficulty"
