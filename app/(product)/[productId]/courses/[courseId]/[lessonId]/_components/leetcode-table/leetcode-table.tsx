@@ -1,15 +1,14 @@
 import {
+  DataTable,
   LeetcodeProblem,
-  columns,
-} from "@/app/(product)/[productId]/courses/[courseId]/[lessonId]/_components/leetcode-table/problems-column";
-import { DataTable } from "@/app/(product)/[productId]/courses/[courseId]/[lessonId]/_components/leetcode-table/data-table";
+} from "@/app/(product)/[productId]/courses/[courseId]/[lessonId]/_components/leetcode-table/data-table";
 import { PracticeProblemWithProgress } from "@/actions/getPracticeProblem";
 
 interface LeetcodeTableProps {
   problems: PracticeProblemWithProgress[];
 }
-export const LeetcodeTable = (props: LeetcodeTableProps) => {
-  const { problems } = props; // Access the 'problems' array from props
+export const LeetcodeTable = ({ problems }: LeetcodeTableProps) => {
+  //   const { problems } = props; // Access the 'problems' array from props
 
   const data: LeetcodeProblem[] = problems.map((problem) => ({
     id: problem.id,
@@ -20,5 +19,5 @@ export const LeetcodeTable = (props: LeetcodeTableProps) => {
     solution: problem.solution,
   }));
 
-  return <DataTable columns={columns} data={data} />;
+  return <DataTable data={data} />;
 };

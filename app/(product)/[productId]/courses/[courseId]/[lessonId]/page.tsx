@@ -13,9 +13,10 @@ import { formatTime } from "@/lib/format";
 import { Clock10 } from "lucide-react";
 import { getSourceCode } from "@/actions/getSourceCode";
 import { getLessonNote } from "@/actions/getLessonNote";
-import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
 import { getPracticeProblem } from "@/actions/getPracticeProblem";
 import { MarkdownNote } from "./_components/markdown-note";
+import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
+import { DataTable } from "./_components/leetcode-table/data-table";
 
 const lessonPage = async ({
   params,
