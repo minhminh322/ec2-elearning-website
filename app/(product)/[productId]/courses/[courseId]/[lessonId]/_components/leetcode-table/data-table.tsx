@@ -44,9 +44,13 @@ export type LeetcodeProblem = {
 
 export function DataTable({ data }: { data: LeetcodeProblem[] }) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({} as RowSelectionState);
-  const firstInitRender = useRef(true);
-  const first2RowRender = useRef(0);
+  const [rowSelection, setRowSelection] = useState(() => {
+    const initialRowSelection = {} as RowSelectionState;
+    for (let i = 0; i < data.length; i++) {
+      initialRowSelection[data[i]["id"]] = !!data[i]["progress"];
+    }
+    return initialRowSelection;
+  });
   const columns = useMemo<ColumnDef<LeetcodeProblem>[]>(
     () => [
       {
@@ -153,6 +157,7 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
     ],
     []
   );
+
   const table = useReactTable({
     data,
     columns,
@@ -168,23 +173,19 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
     debugTable: true,
   });
 
-  useEffect(() => {
-    if (firstInitRender.current) {
-      firstInitRender.current = false;
-      return;
-    }
-    const fetchInitialRowSelection = () => {
-      // console.log("Fetching initial row selection", data);
-      const initialRowSelection = {} as any;
-      for (let i = 0; i < data.length; i++) {
-        const id = (data[i] as any)["id"];
-        initialRowSelection[id] = (data[i] as any)["progress"];
-      }
-      console.log("Initial row selection", initialRowSelection);
-      setRowSelection(initialRowSelection);
-    };
-    fetchInitialRowSelection();
-  }, []);
+  // useEffect(() => {
+  //   if (firstInitRender.current) {
+  //     firstInitRender.current = false;
+  //     return;
+  //   }
+  //   const fetchInitialRowSelection = () => {
+  //     // console.log("Fetching initial row selection", data);
+
+  //     console.log("Initial row selection", initialRowSelection);
+  //     setRowSelection(initialRowSelection);
+  //   };
+  //   fetchInitialRowSelection();
+  // }, []);
   // // async function updateProgress(index: number, updatedRow: boolean) {
 
   // // }
