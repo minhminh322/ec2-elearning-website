@@ -6,6 +6,7 @@ import SessionProvider from "@/lib/SessionProvider";
 import getSession from "@/actions/getSession";
 import { ToastProvider } from "@/components/providers/toaster-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -34,8 +35,9 @@ export default async function RootLayout({
       </Script>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ToastProvider />
+          {/* <ToastProvider /> */}
           <SessionProvider session={session}>{children}</SessionProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -10,28 +10,10 @@ import {
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useState, useEffect } from "react";
+import { CodeGenerator } from "@/components/code-generator/code-generator";
 
 export const MarkdownNote = ({ value }: { value: string }) => {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
-  let codeStyle: { [key: string]: React.CSSProperties }, bgColor: string;
-
-  switch (resolvedTheme) {
-    case "light":
-      codeStyle = oneLight;
-      bgColor = "#fafafa";
-      break;
-    case "dark":
-      codeStyle = oneDark;
-      bgColor = "#282c34";
-      break;
-    default:
-      codeStyle = oneLight;
-      break;
-  }
+  const { theme, setTheme } = useTheme();
 
   return (
     <div style={{ whiteSpace: "pre-wrap" }}>
@@ -43,15 +25,21 @@ export const MarkdownNote = ({ value }: { value: string }) => {
             const { children, className, node, ...rest } = props;
             const match = /language-(\w+)/.exec(className || "");
             return match ? (
-              // @ts-ignore
-              <SyntaxHighlighter
+              <CodeGenerator
                 {...rest}
-                PreTag="div"
-                children={String(children).replace(/\n$/, "")}
+                sourceCode={String(children).replace(/\n$/, "")}
                 language={match[1]}
-                style={codeStyle}
+                style={theme === "dark" ? oneDark : oneLight}
               />
             ) : (
+              // // @ts-ignore
+              // <SyntaxHighlighter
+              //   {...rest}
+              //   PreTag="div"
+              //   children={String(children).replace(/\n$/, "")}
+              //   language={match[1]}
+              //   style={codeStyle}
+              // />
               <code {...rest} className={className}>
                 {children}
               </code>
@@ -80,7 +68,7 @@ export const MarkdownNote = ({ value }: { value: string }) => {
           blockquote: (props) => (
             <blockquote
               style={{
-                backgroundColor: `${bgColor}`,
+                // backgroundColor: `bg-slate-50`,
                 borderLeft: "3px solid #01ff70",
                 margin: "0 0 1em 0",
                 padding: "0.5em 1em",

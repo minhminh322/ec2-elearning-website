@@ -1,6 +1,6 @@
 "use client";
 
-import { CodeGenerator } from "@/components/code-generator";
+import { CodeGenerator } from "@/components/code-generator/code-generator";
 import { Button } from "@/components/ui/button";
 import { Code } from "lucide-react";
 import {

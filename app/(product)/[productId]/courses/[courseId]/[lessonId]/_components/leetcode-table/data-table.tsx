@@ -20,15 +20,20 @@ import {
 } from "@/components/ui/table";
 import { use, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { SolutionButton } from "./SolutionButton";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  CheckCircle,
+  XCircle,
+  MoreHorizontal,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useMemo } from "react";
-import { PracticeProblemWithProgress } from "@/actions/getPracticeProblem";
+
 // interface DataTableProps {
 //   columns: ColumnDef<LeetcodeProblem>[];
 //   data: LeetcodeProblem[];
@@ -43,6 +48,7 @@ export type LeetcodeProblem = {
 };
 
 export function DataTable({ data }: { data: LeetcodeProblem[] }) {
+  const { toast } = useToast();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState(() => {
     const initialRowSelection = {} as RowSelectionState;
@@ -78,12 +84,29 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
                 isCompleted: !currentState,
               })
               .then((res) => {
-                toast.success("Progress updated");
-                console.log("Updated Leetcode progress", row.id);
+                toast({
+                  //   title: "Scheduled: Catch up",
+                  description: (
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="m-1 text-green-500 w-10 h-10" />
+                      <p className="text-lg">Progress updated !</p>
+                    </div>
+                  ),
+                  duration: 3000,
+                });
+                // console.log("Updated Leetcode progress", row.id);
               })
               .catch((err) => {
                 console.log(err);
-                toast.error("Failed to update progress");
+                toast({
+                  description: (
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="m-1 text-red-500 w-10 h-10" />
+                      <p className="text-lg">Something went wrong !</p>
+                    </div>
+                  ),
+                  duration: 3000,
+                });
                 row.toggleSelected(currentState);
               });
           };

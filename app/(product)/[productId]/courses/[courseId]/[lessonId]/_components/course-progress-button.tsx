@@ -5,7 +5,7 @@ import axios from "axios";
 import { CheckCircle, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CourseProgressButtonProps {
   lessonId: string;
@@ -21,6 +21,7 @@ export const CourseProgressButton = ({
   nextLessonId,
 }: CourseProgressButtonProps) => {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const Icon = isCompleted ? XCircle : CheckCircle;
 
@@ -32,10 +33,27 @@ export const CourseProgressButton = ({
         isCompleted: !isCompleted,
       });
 
-      toast.success("Progress updated");
+      toast({
+        //   title: "Scheduled: Catch up",
+        description: (
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="m-1 text-green-500 w-10 h-10" />
+            <p className="text-lg">Progress updated !</p>
+          </div>
+        ),
+        duration: 3000,
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        description: (
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="m-1 text-red-500 w-10 h-10" />
+            <p className="text-lg">Something went wrong !</p>
+          </div>
+        ),
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
