@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeGenerator } from "@/components/code-generator";
+import { CodeGenerator } from "@/components/code-generator/code-generator";
 import { Button } from "@/components/ui/button";
 import { Code } from "lucide-react";
 import {
@@ -18,36 +18,14 @@ import {
   oneLight,
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { CSSProperties } from "react";
-import { useState, useEffect } from "react";
 
 export const SourceCodeButton = ({
   codeBase,
 }: {
   codeBase: { [key: string]: string };
 }) => {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
-  let codeStyle: { [x: string]: CSSProperties }, bgColor;
-
-  switch (resolvedTheme) {
-    case "light":
-      codeStyle = oneLight;
-      bgColor = "#fafafa";
-      break;
-    case "dark":
-      codeStyle = oneDark;
-      bgColor = "#282c34";
-      break;
-    default:
-      codeStyle = oneLight;
-      break;
-  }
-
+  const { theme, setTheme } = useTheme();
+  const keys = Object.keys(codeBase);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -61,17 +39,22 @@ export const SourceCodeButton = ({
       <DialogContent className="max-w-5xl flex justify-center">
         <Tabs defaultValue={Object.keys(codeBase)[0]} className="max-w-4xl">
           <TabsList className={`grid w-full grid-cols-3`}>
-            {Object.keys(codeBase).map((key) => {
-              return <TabsTrigger value={key}>{key}</TabsTrigger>;
+            {keys.map((key) => {
+              return (
+                <TabsTrigger key={key} value={key}>
+                  {key}
+                </TabsTrigger>
+              );
             })}
           </TabsList>
-          {Object.keys(codeBase).map((key) => {
+          {keys.map((key) => {
             return (
-              <TabsContent value={key}>
+              <TabsContent key={key} value={key}>
                 <CodeGenerator
                   sourceCode={codeBase[key]}
                   language="python"
-                  style={codeStyle}
+                  style={theme === "dark" ? oneDark : oneLight}
+                  rest={undefined}
                 />
               </TabsContent>
             );

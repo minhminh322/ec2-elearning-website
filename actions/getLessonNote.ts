@@ -29,13 +29,14 @@ export const getLessonNote = async (courseName: string, lesson: Lesson) => {
     if (!data || !data.content) {
       return null;
     }
+
     // Decode utf-8 instead of atob base64 string
     const htmlString = b64DecodeUnicode(data.content);
 
-    // Sanitize html string
-    const sanitizedHtmlString = sanitize(htmlString);
-
-    return sanitizedHtmlString;
+    // Sanitize html string. NOTE: it generated some unexpected html tags. So, I decided to not use it for now.
+    // const sanitizedHtmlString = sanitize(htmlString);
+    // console.log("Github content ", htmlString);
+    return htmlString;
   } catch (error) {
     throw new Error(`Could not get note: ${error}`);
   }
