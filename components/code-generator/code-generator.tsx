@@ -15,7 +15,7 @@ export const CodeGenerator = ({
   ...rest
 }: CodeGeneratorProps) => {
   return (
-    <div className="relative">
+    <div className="relative w-full h-full">
       <CodeCopyButton code={sourceCode} language={language} />
       <SyntaxHighlighter
         {...rest}

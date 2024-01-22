@@ -20,26 +20,7 @@ import {
 import { useState, useEffect } from "react";
 
 export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
-  let codeStyle, bgColor;
-
-  switch (resolvedTheme) {
-    case "light":
-      codeStyle = oneLight;
-      bgColor = "#fafafa";
-      break;
-    case "dark":
-      codeStyle = oneDark;
-      bgColor = "#282c34";
-      break;
-    default:
-      codeStyle = oneLight;
-      break;
-  }
+  const { theme, setTheme } = useTheme();
 
   return (
     <Dialog>
@@ -50,12 +31,14 @@ export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-5xl flex justify-center">
-        <CodeGenerator
-          sourceCode={sourceCode}
-          language="python"
-          style={codeStyle}
-        />
+      <DialogContent className=" max-w-5xl flex justify-center">
+        <div className="w-full h-full max-h-80vh">
+          <CodeGenerator
+            sourceCode={sourceCode}
+            language="python"
+            style={theme === "dark" ? oneDark : oneLight}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -25,6 +25,12 @@ export const getLesson = async ({
       },
     });
 
+    const product = await db.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
     const course = await db.course.findUnique({
       where: {
         id: courseId,
@@ -69,8 +75,9 @@ export const getLesson = async ({
     });
 
     return {
-      lesson,
+      product,
       course,
+      lesson,
       video,
       nextLesson,
       UserProgress,

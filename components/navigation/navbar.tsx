@@ -47,7 +47,7 @@ export const Navbar = () => {
 
   return (
     <div className="flex justify-between shadow-sm border-b p-4">
-      <div className="ml-3 my-auto cursor-pointer ">
+      <div className="ml-3 my-auto cursor-pointer hover:rotate-12">
         <Link href="/">
           <Logo logoType="default" />
         </Link>

@@ -16,6 +16,7 @@ export const LeetcodeTable = ({ problems }: LeetcodeTableProps) => {
     problemName: problem.problemName,
     difficulty: problem.difficulty,
     url: problem.url,
+    threadId: problem.threadId,
     solution: problem.solution,
   }));
 
