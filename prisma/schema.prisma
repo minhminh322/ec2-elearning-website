@@ -72,7 +72,7 @@ model PracticeProblem {
   createdAt    DateTime                      @default(now())
   updatedAt    DateTime                      @updatedAt
   problemName  String
-  solution     String?
+  threadId     String?
   difficulty   Difficulty                    @default(Easy)
   lessonId     String
   lesson       Lesson                        @relation(fields: [lessonId], references: [id], onDelete: Cascade)

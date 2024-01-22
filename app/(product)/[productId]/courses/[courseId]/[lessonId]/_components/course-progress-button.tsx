@@ -25,42 +25,77 @@ export const CourseProgressButton = ({
   const [isLoading, setIsLoading] = useState(false);
   const Icon = isCompleted ? XCircle : CheckCircle;
 
-  const onClick = async () => {
-    try {
-      setIsLoading(true);
+  const updateProgress = () => {
+    setIsLoading(true);
 
-      await axios.put(`/api/courses/${courseId}/${lessonId}/userProgress`, {
+    axios
+      .put(`/api/courses/${courseId}/${lessonId}/userProgress`, {
         isCompleted: !isCompleted,
+      })
+      .then((res) => {
+        toast({
+          //   title: "Scheduled: Catch up",
+          description: (
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="m-1 text-green-500 w-10 h-10" />
+              <p className="text-lg">Progress updated !</p>
+            </div>
+          ),
+          duration: 3000,
+        });
+      })
+      .then(() => {
+        setIsLoading(false);
+        router.refresh();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          description: (
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="m-1 text-red-500 w-10 h-10" />
+              <p className="text-lg">Something went wrong !</p>
+            </div>
+          ),
+          duration: 3000,
+        });
       });
 
-      toast({
-        //   title: "Scheduled: Catch up",
-        description: (
-          <div className="flex items-center space-x-2">
-            <CheckCircle className="m-1 text-green-500 w-10 h-10" />
-            <p className="text-lg">Progress updated !</p>
-          </div>
-        ),
-        duration: 3000,
-      });
-      router.refresh();
-    } catch {
-      toast({
-        description: (
-          <div className="flex items-center space-x-2">
-            <CheckCircle className="m-1 text-red-500 w-10 h-10" />
-            <p className="text-lg">Something went wrong !</p>
-          </div>
-        ),
-        duration: 3000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // try {
+    //   setIsLoading(true);
+
+    //   await axios.put(`/api/courses/${courseId}/${lessonId}/userProgress`, {
+    //     isCompleted: !isCompleted,
+    //   });
+
+    //   toast({
+    //     //   title: "Scheduled: Catch up",
+    //     description: (
+    //       <div className="flex items-center space-x-2">
+    //         <CheckCircle className="m-1 text-green-500 w-10 h-10" />
+    //         <p className="text-lg">Progress updated !</p>
+    //       </div>
+    //     ),
+    //     duration: 3000,
+    //   });
+    //   router.refresh();
+    // } catch {
+    //   toast({
+    //     description: (
+    //       <div className="flex items-center space-x-2">
+    //         <CheckCircle className="m-1 text-red-500 w-10 h-10" />
+    //         <p className="text-lg">Something went wrong !</p>
+    //       </div>
+    //     ),
+    //     duration: 3000,
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
   return (
     <Button
-      onClick={onClick}
+      onClick={updateProgress}
       disabled={isLoading}
       type="button"
       variant={isCompleted ? "outline" : "success"}

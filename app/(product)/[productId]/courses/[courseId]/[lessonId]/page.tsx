@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { VideoPlayer } from "./_components/video-player";
 import getSession from "@/actions/getSession";
 import { Separator } from "@/components/ui/separator";
-import { Description } from "@/components/description";
 import { getLesson } from "@/actions/getLesson";
 import { User } from "@/lib/interface";
 import { CourseProgressButton } from "./_components/course-progress-button";
@@ -16,7 +15,6 @@ import { getLessonNote } from "@/actions/getLessonNote";
 import { getPracticeProblem } from "@/actions/getPracticeProblem";
 import { MarkdownNote } from "./_components/markdown-note";
 import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
-import { DataTable } from "./_components/leetcode-table/data-table";
 
 const lessonPage = async ({
   params,
@@ -32,7 +30,7 @@ const lessonPage = async ({
     return redirect("/");
   }
 
-  const { lesson, course, video, nextLesson, UserProgress, purchase } =
+  const { product, course, lesson, video, nextLesson, UserProgress, purchase } =
     await getLesson({
       userId: (session?.user as User).id,
       lessonId: params.lessonId,
@@ -49,6 +47,7 @@ const lessonPage = async ({
 
   const { problems } = await getPracticeProblem({
     userId: (session?.user as User).id,
+    product: product!,
     lesson: lesson,
   });
 

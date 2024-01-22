@@ -1,19 +1,22 @@
-import { Lesson, PracticeProblem } from "@prisma/client";
+import { Lesson, PracticeProblem, Product } from "@prisma/client";
 import { db } from "@/lib/db";
-import { getLeetCodeSolution } from "./getLeetCodeSolution";
+import { LeetCodeSolution, getLeetCodeSolution } from "./getLeetCodeSolution";
 
 interface GetPracticeProblemProps {
   userId: string;
+  product: Product;
   lesson: Lesson;
 }
 
 export type PracticeProblemWithProgress = PracticeProblem & {
+  solution: string | null;
   progress: boolean | null;
   url: string;
 };
 
 export const getPracticeProblem = async ({
   userId,
+  product,
   lesson,
 }: GetPracticeProblemProps) => {
   try {
@@ -26,6 +29,10 @@ export const getPracticeProblem = async ({
     if (!problems) {
       throw new Error("Problem not found");
     }
+    const solutions = (await getLeetCodeSolution({
+      product,
+      lesson,
+    })) as LeetCodeSolution;
 
     // Generate url for each problem and update progress
     for (let p of problems) {
@@ -48,7 +55,7 @@ export const getPracticeProblem = async ({
         .split(" ")
         .map((str) => str.toLowerCase())
         .join("-");
-      p["solution"] = await getLeetCodeSolution(problemId);
+      p["solution"] = solutions[problemId];
       p["url"] = `https://leetcode.com/problems/${problemId}`;
     }
 

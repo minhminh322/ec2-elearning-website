@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 // interface DataTableProps {
 //   columns: ColumnDef<LeetcodeProblem>[];
@@ -44,11 +45,15 @@ export type LeetcodeProblem = {
   problemName: string;
   difficulty: "Easy" | "Medium" | "Hard";
   url: string;
+  threadId: string | null;
   solution: string | null;
 };
 
 export function DataTable({ data }: { data: LeetcodeProblem[] }) {
   const { toast } = useToast();
+  const router = useRouter();
+  // TODO: Refactor later
+  const discordUrl = "https://discord.com/channels/1136993091480465572";
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState(() => {
     const initialRowSelection = {} as RowSelectionState;
@@ -63,19 +68,6 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
         accessorKey: "progress",
         header: "Status",
         cell: ({ row, column, table, getValue }) => {
-          // const initialValue = row["original"]["progress"];
-          // console.log("Initial value:", initialValue, row.getIsSelected(), row.id);
-          // // console.log(row["original"]["id"]);
-          // // row.toggleSelected(!!initialValue);
-          // console.log(table);
-          // const initialValue = getValue();
-          // // const [value, setValue] = React.useState(initialValue);
-          // console.log(
-          //   "Initial value:",
-          //   initialValue,
-          //   row.getIsSelected(),
-          //   row.id
-          // );
           const updateProgress = async () => {
             const currentState: boolean = row.getIsSelected();
             row.toggleSelected(!row.getIsSelected());
@@ -94,6 +86,7 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
                   ),
                   duration: 3000,
                 });
+                router.refresh();
                 // console.log("Updated Leetcode progress", row.id);
               })
               .catch((err) => {
@@ -111,13 +104,13 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
               });
           };
           return (
-            // <div className="flex justify-center items-center h-full">
-            <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={updateProgress}
-              aria-label="Select row"
-            />
-            // </div>
+            <div className="flex justify-center items-center">
+              <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={updateProgress}
+                aria-label="Select row"
+              />
+            </div>
           );
         },
       },
@@ -159,7 +152,11 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
           ) as LeetcodeProblem["difficulty"];
 
           // Return a link to the problem
-          return <Badge variant={difficulty as any}>{difficulty}</Badge>;
+          return (
+            <div className="flex justify-center items-center h-full">
+              <Badge variant={difficulty as any}>{difficulty}</Badge>
+            </div>
+          );
         },
       },
 
@@ -170,10 +167,34 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
           const solution = row.getValue("solution") as string;
           // Return a link to the problem
           return (
-            // <a href={solution} target="_blank" rel="noopener noreferrer">
-            //   <span className="no-underline hover:underline">View</span>
-            // </a>
-            <SolutionButton sourceCode={solution} />
+            <div className="flex justify-center items-center h-full">
+              <SolutionButton sourceCode={solution} />
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "threadId",
+        header: "Discussion",
+        cell: ({ row }) => {
+          if (!row.getValue("threadId")) {
+            return (
+              <div className="flex justify-center items-center h-full">
+                <XCircle className="text-red-500 w-5 h-5" />
+              </div>
+            );
+          }
+          const discussion = `${discordUrl}/${row.getValue("threadId")}`;
+          // Return a link to the problem
+          return (
+            <a
+              className="flex justify-center items-center h-full"
+              href={discussion}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="no-underline hover:underline">View</span>
+            </a>
           );
         },
       },
