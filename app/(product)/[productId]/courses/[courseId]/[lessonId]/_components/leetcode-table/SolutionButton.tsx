@@ -25,20 +25,26 @@ export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="cursor-pointer">
-          <Button variant="ghost">
-            <Code className="h-4 w-4" />
-          </Button>
-        </div>
+        <Button variant="invisible" className="hover:text-emerald-500">
+          <Code className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent className=" max-w-5xl flex justify-center">
-        <div className="w-full h-full max-h-80vh">
-          <CodeGenerator
-            sourceCode={sourceCode}
-            language="python"
-            style={theme === "dark" ? oneDark : oneLight}
-          />
-        </div>
+        {sourceCode ? (
+          <div className="w-full h-full max-h-80vh">
+            <CodeGenerator
+              sourceCode={sourceCode}
+              language="python"
+              style={theme === "dark" ? oneDark : oneLight}
+            />
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <DialogDescription className="text-3xl">
+              No solution found
+            </DialogDescription>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
