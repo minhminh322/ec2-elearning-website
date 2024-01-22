@@ -21,7 +21,6 @@ import {
 import { use, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
-
 import { Checkbox } from "@/components/ui/checkbox";
 import { SolutionButton } from "./SolutionButton";
 import { Badge } from "@/components/ui/badge";
@@ -109,6 +108,7 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
                 checked={row.getIsSelected()}
                 onCheckedChange={updateProgress}
                 aria-label="Select row"
+                className="hover:border-emerald-500"
               />
             </div>
           );
@@ -217,40 +217,6 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
     debugTable: true,
   });
 
-  // useEffect(() => {
-  //   if (firstInitRender.current) {
-  //     firstInitRender.current = false;
-  //     return;
-  //   }
-  //   const fetchInitialRowSelection = () => {
-  //     // console.log("Fetching initial row selection", data);
-
-  //     console.log("Initial row selection", initialRowSelection);
-  //     setRowSelection(initialRowSelection);
-  //   };
-  //   fetchInitialRowSelection();
-  // }, []);
-  // // async function updateProgress(index: number, updatedRow: boolean) {
-
-  // // }
-  // useEffect(() => {
-  //   // if (first2RowRender.current < 2) {
-  //   //   first2RowRender.current += 1;
-  //   //   return;
-  //   // }
-
-  //   // const fetchData = async () => {
-  //   //   table.getRowModel().rows?.forEach(async (row) => {
-  //   //     const updatedRow = row.getIsSelected();
-  //   //     const originalRow = (data[row.index] as any)["progress"];
-  //   //     if (updatedRow !== originalRow) {
-  //   //       await updateProgress(row.index, updatedRow);
-  //   //     }
-  //   //   });
-  //   // };
-  //   // fetchData();
-  //   console.log("Row selection changed", rowSelection);
-  // }, [rowSelection]);
   return (
     <div className="rounded-md border">
       <Table>
@@ -258,8 +224,14 @@ export function DataTable({ data }: { data: LeetcodeProblem[] }) {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                // Custom CSS for Problem column
+                const headerClass =
+                  header.column.columnDef.header === "Problem"
+                    ? "text-left"
+                    : "";
+
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={headerClass}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
