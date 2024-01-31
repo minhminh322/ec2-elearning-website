@@ -54,7 +54,8 @@ export const getLeetCodeSolution = async ({
     // console.log("Github content ", problems);
     return problems;
   } catch (error) {
-    throw new Error(`Could not get Leetcode Solution: ${error}`);
-    return [];
+    // throw new Error(`Could not get Leetcode Solution: ${error}`);
+    console.log("[ERROR] getLeetCodeSolution: ", error);
+    return {};
   }
 };

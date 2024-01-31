@@ -55,7 +55,11 @@ export const getPracticeProblem = async ({
         .split(" ")
         .map((str) => str.toLowerCase())
         .join("-");
-      p["solution"] = solutions[problemId];
+      if (problemId in solutions) {
+        p["solution"] = solutions[problemId];
+      } else {
+        p["solution"] = "";
+      }
       p["url"] = `https://leetcode.com/problems/${problemId}`;
     }
 

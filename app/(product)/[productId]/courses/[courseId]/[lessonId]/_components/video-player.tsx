@@ -46,7 +46,7 @@ export const VideoPlayer = ({
           <ReactPlayer
             url={videoUrl}
             loop={true}
-            playing={true}
+            // playing={true}
             width="100%"
             height="100%"
           />

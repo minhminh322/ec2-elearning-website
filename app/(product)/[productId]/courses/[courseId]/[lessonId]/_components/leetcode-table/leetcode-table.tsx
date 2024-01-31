@@ -8,17 +8,21 @@ interface LeetcodeTableProps {
   problems: PracticeProblemWithProgress[];
 }
 export const LeetcodeTable = ({ problems }: LeetcodeTableProps) => {
-  //   const { problems } = props; // Access the 'problems' array from props
-
-  const data: LeetcodeProblem[] = problems.map((problem) => ({
-    id: problem.id,
-    progress: problem.progress,
-    problemName: problem.problemName,
-    difficulty: problem.difficulty,
-    url: problem.url,
-    threadId: problem.threadId,
-    solution: problem.solution,
-  }));
+  // Prepare data for table
+  const data: LeetcodeProblem[] = problems
+    .map((problem) => ({
+      id: problem.id,
+      progress: problem.progress,
+      problemName: problem.problemName,
+      difficulty: problem.difficulty,
+      url: problem.url,
+      threadId: problem.threadId,
+      solution: problem.solution,
+    }))
+    .sort((a, b) => {
+      const order = ["Easy", "Medium", "Hard"];
+      return order.indexOf(a.difficulty) - order.indexOf(b.difficulty);
+    });
 
   return <DataTable data={data} />;
 };
