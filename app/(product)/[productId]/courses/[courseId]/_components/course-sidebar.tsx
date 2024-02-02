@@ -33,7 +33,7 @@ export const CourseSidebar = ({
   return (
     <aside
       className={`h-full overflow-y-auto flex flex-col border-r shadow-sm transition-all ${
-        isOpen ? "max-w-xs" : "max-w-[5rem]"
+        isOpen ? "max-w-sm" : "max-w-[5rem]"
       }`}
     >
       <div className="flex justify-between items-center gap-x-10 p-3">

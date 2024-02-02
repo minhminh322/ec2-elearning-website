@@ -27,7 +27,7 @@ export const ProductList = ({
             courseLength={product.courses.length}
             imageId={product.imageId!}
             price={product.price!}
-            progress={product.progress}
+            progress={product.progress!}
           />
         ))}
       </div>

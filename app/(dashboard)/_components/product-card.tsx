@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IconBadge } from "../../../components/icon-badge";
-import { Calendar } from "lucide-react";
 import { CourseProgress } from "../../../components/course-progress";
 import { formatPrice } from "@/lib/format";
 
@@ -30,28 +28,26 @@ export const ProductCard = ({
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
             fill
-            className="object-cover"
+            className="h-auto w-auto object-cover transition-all hover:scale-105"
             alt={title}
             src={image_base_url + imageId}
           />
         </div>
         <div className="flex flex-col mt-2">
-          <div className="text-lg md:text-base font-medium group-hover:text-emerald-700 transition line-clamp-2">
+          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
             {title}
           </div>
           <div className="flex justify-between mt-1">
             <p className="text-xs text-muted-foreground">{description}</p>
-            <div className="flex items-center gap-x-2 text-sm md:text-xs">
-              <div className="flex items-center gap-x-1 text-slate-500">
-                <IconBadge size="sm" icon={Calendar} />
-                <span>
-                  {courseLength} {courseLength === 1 ? "Week" : "Weeks"}
-                </span>
-              </div>
-            </div>
           </div>
           <div className="mt-3">
-            {progress !== null ? (
+            <CourseProgress
+              variant={progress === 100 ? "success" : "default"}
+              size="sm"
+              value={progress || 0}
+              length={courseLength || 0}
+            />
+            {/* {progress !== null ? (
               <CourseProgress
                 variant={progress === 100 ? "success" : "default"}
                 size="sm"
@@ -61,7 +57,7 @@ export const ProductCard = ({
               <p className="text-md md:text-sm font-medium text-slate-700">
                 {formatPrice(price)}
               </p>
-            )}
+            )} */}
           </div>
         </div>
       </div>
