@@ -39,7 +39,7 @@ const CourseLayout = async ({
   });
 
   return (
-    <div className="grid grid-cols-[0fr,5fr] md:grid-cols-[auto,5fr] flex-grow-1">
+    <div className="grid grid-cols-[0fr,5fr] md:grid-cols-[1.5fr,5fr] flex-grow-1">
       <CourseSidebar
         productId={params.productId}
         product={product}
