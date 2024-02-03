@@ -56,7 +56,11 @@ export const CourseSidebar = ({
       {isOpen && (
         <>
           <div className="p-3">
-            <CourseProgress variant="success" value={progressCount} />
+            <CourseProgress
+              variant={progressCount === 100 ? "success" : "default"}
+              value={progressCount}
+              length={courses.length}
+            />
           </div>
           <div className="p-3">
             <CourseContent courses={courses} productId={productId} />

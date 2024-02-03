@@ -1,21 +1,25 @@
 "use client";
 
-import { Suspense, useState, lazy } from "react";
+import { useState, lazy } from "react";
 // import ReactPlayer from "react-player/vimeo";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { VideoMeta } from "@/actions/getVimeoVideo";
+
 const ReactPlayer = lazy(() => import("react-player/vimeo"));
 
 interface VideoPlayerProps {
-  videoUrl: string;
+  videoMeta: VideoMeta;
   lessonId: string;
   courseId: string;
   isCompleted?: boolean;
   nextLessonId: string | null;
 }
 export const VideoPlayer = ({
-  videoUrl,
+  videoMeta,
   lessonId,
   courseId,
   isCompleted,
@@ -23,6 +27,7 @@ export const VideoPlayer = ({
 }: VideoPlayerProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const onEnded = async () => {
     try {
       setIsLoading(true);
@@ -40,26 +45,31 @@ export const VideoPlayer = ({
     }
   };
   return (
-    <Suspense fallback={<h1>Loading...</h1>}>
-      <div className="relative aspect-video">
-        {videoUrl.includes("895596196") ? (
-          <ReactPlayer
-            url={videoUrl}
-            loop={true}
-            // playing={true}
-            width="100%"
-            height="100%"
-          />
-        ) : (
-          <ReactPlayer
-            url={videoUrl}
-            controls
-            width="100%"
-            height="100%"
-            onEnded={onEnded}
-          />
-        )}
-      </div>
-    </Suspense>
+    <div className="relative aspect-video">
+      {videoMeta && !isReady && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
+          <Loader2 className="h-8 w-8 animate-spin text-secondary dark:text-sky-600" />
+        </div>
+      )}
+      {!videoMeta && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
+          {/* <Lock className="h-8 w-8" /> */}
+          <p className="text-lg dark:text-sky-500">
+            This Lesson Will Be Available Soon
+          </p>
+        </div>
+      )}
+      {videoMeta && (
+        <ReactPlayer
+          url={videoMeta.link}
+          style={{ display: isReady ? "" : "hidden" }}
+          controls
+          width="100%"
+          height="100%"
+          onEnded={onEnded}
+          onReady={() => setIsReady(true)}
+        />
+      )}
+    </div>
   );
 };
