@@ -15,6 +15,7 @@ import { getLessonNote } from "@/actions/getLessonNote";
 import { getPracticeProblem } from "@/actions/getPracticeProblem";
 import { MarkdownNote } from "./_components/markdown-note";
 import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
+import getUserId from "@/actions/getUserId";
 
 const lessonPage = async ({
   params,
@@ -25,30 +26,29 @@ const lessonPage = async ({
     lessonId: string;
   };
 }) => {
-  const session = await getSession();
-  if (!session) {
+  const userId = await getUserId();
+  if (!userId) {
     return redirect("/");
   }
 
   const { product, course, lesson, video, nextLesson, UserProgress, purchase } =
     await getLesson({
-      userId: (session?.user as User).id,
+      userId,
       lessonId: params.lessonId,
       courseId: params.courseId,
       productId: params.productId,
     });
 
-  // Default video "Available Soon"
-  const videoMeta = await getVimeoVideo(video?.playbackId ?? "895596196");
-  // console.log(videoMeta);
-  if (!lesson || !course) {
+  if (!lesson || !course || !purchase) {
     return redirect("/");
   }
+  // Default video "Available Soon"
+  const videoMeta = await getVimeoVideo(video?.playbackId ?? "");
 
   const { problems } = await getPracticeProblem({
-    userId: (session?.user as User).id,
+    userId,
     product: product!,
-    lesson: lesson,
+    lesson,
   });
 
   const codeBase = await getSourceCode("DSA-Course", lesson);
@@ -64,7 +64,7 @@ const lessonPage = async ({
       <div className="w-full p-7">
         <div className="flex justify-between my-5">
           <h1 className="text-4xl font-bold">{lesson?.title}</h1>
-          {video && (
+          {videoMeta && (
             <div className="flex items-center">
               <Clock10 className="h-6 w-6 mr-2" />
               <h1>{formatTime(videoMeta.duration)} mins</h1>
@@ -73,7 +73,7 @@ const lessonPage = async ({
         </div>
         <div className="max-w-5xl mx-auto">
           <VideoPlayer
-            videoUrl={videoMeta.link}
+            videoMeta={videoMeta!}
             lessonId={params.lessonId}
             courseId={params.courseId}
             isCompleted={!!UserProgress?.isCompleted}

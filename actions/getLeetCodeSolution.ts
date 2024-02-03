@@ -25,7 +25,12 @@ export const getLeetCodeSolution = async ({
         },
       }
     );
+    if (!response.ok) {
+      throw new Error("Failed to fetch LeetCode problems");
+    }
+
     const data = await response.json();
+
     const problems = {} as LeetCodeSolution;
     for (let problem of data) {
       await fetch(problem.download_url, {
@@ -55,7 +60,7 @@ export const getLeetCodeSolution = async ({
     return problems;
   } catch (error) {
     // throw new Error(`Could not get Leetcode Solution: ${error}`);
-    console.log("[ERROR] getLeetCodeSolution: ", error);
+    // console.log("[ERROR] getLeetCodeSolution: ", error);
     return {};
   }
 };
