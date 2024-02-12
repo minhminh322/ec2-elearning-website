@@ -1,30 +1,30 @@
-import { Lesson, PracticeProblem, Product } from "@prisma/client";
+import { Lesson, LeetcodeProblem, Product } from "@prisma/client";
 import { db } from "@/lib/db";
 import { LeetCodeSolution, getLeetCodeSolution } from "./getLeetCodeSolution";
 
-interface GetPracticeProblemProps {
+interface GetLeetcodeProblemProps {
   userId: string;
   product: Product;
   lesson: Lesson;
 }
 
-export type PracticeProblemWithProgress = PracticeProblem & {
+export type LeetcodeProblemWithProgress = LeetcodeProblem & {
   solution: string | null;
   progress: boolean | null;
   url: string;
 };
 
-export const getPracticeProblem = async ({
+export const getLeetcodeProblem = async ({
   userId,
   product,
   lesson,
-}: GetPracticeProblemProps) => {
+}: GetLeetcodeProblemProps) => {
   try {
-    const problems = (await db.practiceProblem.findMany({
+    const problems = (await db.LeetcodeProblem.findMany({
       where: {
         lessonId: lesson.id,
       },
-    })) as PracticeProblemWithProgress[];
+    })) as LeetcodeProblemWithProgress[];
 
     if (!problems) {
       throw new Error("Problem not found");
@@ -36,7 +36,7 @@ export const getPracticeProblem = async ({
 
     // Generate url for each problem and update progress
     for (let p of problems) {
-      const progress = await db.userPracticeProblemProgress.findUnique({
+      const progress = await db.userLeetcodeProblemProgress.findUnique({
         where: {
           userId_problemId: {
             userId,
@@ -67,7 +67,7 @@ export const getPracticeProblem = async ({
       problems,
     };
   } catch (error) {
-    console.log("[ERROR] getPracticeProblem: ", error);
+    console.log("[ERROR] getLeetcodeProblem: ", error);
     return {
       problems: [],
     };

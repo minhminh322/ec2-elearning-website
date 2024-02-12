@@ -38,6 +38,7 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String
+  pathName    String?  @unique @default(cuid())
   description String?
   imageId     String?
   position    Int
@@ -61,7 +62,8 @@ model Lesson {
   courseId         String
   course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
   userProgress     UserProgress[]
-  practiceProblems PracticeProblem[]
+  LeetcodeProblems LeetcodeProblem[]
+  PracticeProblems PracticeProblem?
   video            Video?
 
   @@index([courseId], map: "Lesson_courseId_fkey")
@@ -72,13 +74,27 @@ model PracticeProblem {
   createdAt    DateTime                      @default(now())
   updatedAt    DateTime                      @updatedAt
   problemName  String
+  content      String                        @default("")
+  executeFile  String                        @default("")
+  lessonId     String?                       @unique
+  lesson       Lesson?                       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  UserProgress UserPracticeProblemProgress[]
+
+  @@index([lessonId], map: "PracticeProblem_lessonId_fkey")
+}
+
+model LeetcodeProblem {
+  id           String                        @id @default(uuid())
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  problemName  String
   threadId     String?
   difficulty   Difficulty                    @default(Easy)
   lessonId     String
   lesson       Lesson                        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  UserProgress UserPracticeProblemProgress[]
+  UserProgress UserLeetcodeProblemProgress[]
 
-  @@index([lessonId], map: "PracticeProblem_lessonId_fkey")
+  @@index([lessonId], map: "LeetcodeProblem_lessonId_fkey")
 }
 
 model Video {
@@ -107,14 +123,39 @@ model UserProgress {
 model UserPracticeProblemProgress {
   id              String          @id @default(uuid())
   createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+  userId          String
+  problemId       String
+  tokenId         String?         @unique
+  PracticeProblem PracticeProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  Submission      Submission?     @relation(fields: [tokenId], references: [id], onDelete: Cascade)
+
+  @@index([problemId], map: "UserPracticeProblemProgress_problemId_fkey")
+}
+
+model Submission {
+  id                  String                       @id @default(uuid())
+  createdAt           DateTime                     @default(now())
+  updatedAt           DateTime                     @default(now()) @updatedAt
+  sourceCode          String?                      @db.Text
+  language            String?
+  status              String?                      @default("Pending")
+  timeExecuted        String?
+  memoryUsed          Int?
+  userPracticeProblem UserPracticeProblemProgress?
+}
+
+model UserLeetcodeProblemProgress {
+  id              String          @id @default(uuid())
+  createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   userId          String
   problemId       String
   isCompleted     Boolean         @default(false)
-  PracticeProblem PracticeProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  LeetcodeProblem LeetcodeProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([userId, problemId])
-  @@index([problemId], map: "UserPracticeProblemProgress_problemId_fkey")
+  @@index([problemId], map: "UserLeetcodeProblemProgress_problemId_fkey")
 }
 
 model Purchase {
@@ -178,3 +219,15 @@ enum LessonType {
   Note
   Optional
 }
+
+// enum SubmissionStatus {
+//   Pending
+//   Accepted
+//   WrongAnswer
+//   TimeLimitExceeded
+//   MemoryLimitExceeded
+//   RuntimeError
+//   CompilationError
+//   InternalError
+//   UnknownError
+// }

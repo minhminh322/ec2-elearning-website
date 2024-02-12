@@ -38,7 +38,7 @@ export const SourceCodeButton = ({
       </DialogTrigger>
       <DialogContent className="max-w-5xl flex justify-center">
         <Tabs defaultValue={Object.keys(codeBase)[0]} className="max-w-4xl">
-          <TabsList className={`grid w-full grid-cols-3`}>
+          <TabsList className="">
             {keys.map((key) => {
               return (
                 <TabsTrigger key={key} value={key}>

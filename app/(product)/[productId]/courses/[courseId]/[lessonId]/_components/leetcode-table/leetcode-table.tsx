@@ -2,10 +2,10 @@ import {
   DataTable,
   LeetcodeProblem,
 } from "@/app/(product)/[productId]/courses/[courseId]/[lessonId]/_components/leetcode-table/data-table";
-import { PracticeProblemWithProgress } from "@/actions/getPracticeProblem";
+import { LeetcodeProblemWithProgress } from "@/actions/getLeetcodeProblem";
 
 interface LeetcodeTableProps {
-  problems: PracticeProblemWithProgress[];
+  problems: LeetcodeProblemWithProgress[];
 }
 export const LeetcodeTable = ({ problems }: LeetcodeTableProps) => {
   // Prepare data for table

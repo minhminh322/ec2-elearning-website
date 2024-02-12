@@ -9,11 +9,11 @@ import { getVimeoVideo } from "@/actions/getVimeoVideo";
 import { SourceCodeButton } from "./_components/source-code-button";
 import { NextButton } from "./_components/next-button";
 import { formatTime } from "@/lib/format";
-import { Clock10 } from "lucide-react";
+import { Clock10, Code } from "lucide-react";
 import { getSourceCode } from "@/actions/getSourceCode";
 import { getLessonNote } from "@/actions/getLessonNote";
-import { getPracticeProblem } from "@/actions/getPracticeProblem";
-import { MarkdownNote } from "./_components/markdown-note";
+import { getLeetcodeProblem } from "@/actions/getLeetcodeProblem";
+import { MarkdownNote } from "../../../../../../components/markdown-note";
 import { LeetcodeTable } from "./_components/leetcode-table/leetcode-table";
 import getUserId from "@/actions/getUserId";
 
@@ -45,7 +45,7 @@ const lessonPage = async ({
   // Default video "Available Soon"
   const videoMeta = await getVimeoVideo(video?.playbackId ?? "");
 
-  const { problems } = await getPracticeProblem({
+  const { problems } = await getLeetcodeProblem({
     userId,
     product: product!,
     lesson,
@@ -94,7 +94,6 @@ const lessonPage = async ({
           <div className="">
             <NextButton nextLessonId={nextLesson?.id ?? null} />
           </div>
-          {/* <Button>Mark as complete</Button> or Purchase */}
         </div>
         <Separator />
         {problems.length > 0 && (
@@ -103,11 +102,7 @@ const lessonPage = async ({
             <LeetcodeTable problems={problems} />
           </>
         )}
-
-        {/* <div className="text-2xl font-semibold my-3">Lecture Note</div> */}
         <div className="my-3">
-          {/* <div dangerouslySetInnerHTML={{ __html: note! }} /> */}
-          {/* <Description value={note!} /> */}
           <MarkdownNote value={note!} />
         </div>
       </div>
