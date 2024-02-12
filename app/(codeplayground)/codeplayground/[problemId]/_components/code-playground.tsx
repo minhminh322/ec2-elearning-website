@@ -131,7 +131,7 @@ export const CodePlayground = ({
 
     const options = {
       method: "POST",
-      url: "http://localhost:8080/submissions", // TODO: change to backend url
+      url: `${process.env.AWS_BACKEND_BASE_URL}/submissions`, // TODO: change to backend url
       headers: {
         "Content-Type": "application/json",
       },
