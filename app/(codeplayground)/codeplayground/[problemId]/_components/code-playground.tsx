@@ -122,6 +122,7 @@ export const CodePlayground = ({
 
   const handleCompile = () => {
     setProcessing(true);
+    console.log("URL compiled", `${process.env.AWS_BACKEND_BASE_URL}/submissions`);
     const formData = {
       userId,
       sourceCode: sourceCode,
@@ -131,7 +132,7 @@ export const CodePlayground = ({
 
     const options = {
       method: "POST",
-      url: `${process.env.AWS_BACKEND_BASE_URL}/submissions`, // TODO: change to backend url
+      url: `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/submissions`, // TODO: change to backend url
       headers: {
         "Content-Type": "application/json",
       },

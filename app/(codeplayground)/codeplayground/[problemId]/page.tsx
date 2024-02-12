@@ -35,7 +35,7 @@ const CodePlaygroundPage = async ({
   }
 
   const response = await axios.get(
-    `${process.env.AWS_BACKEND_BASE_URL}/code-playground?problemId=${params.problemId}`
+    `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/code-playground?problemId=${params.problemId}`
   );
 
   if (!response.data) {
