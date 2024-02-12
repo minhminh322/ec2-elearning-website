@@ -14,7 +14,7 @@ export async function PUT(
     }
 
     const { isCompleted } = await req.json();
-    const userProgress = await db.userPracticeProblemProgress.upsert({
+    const userProgress = await db.userLeetcodeProblemProgress.upsert({
       where: {
         userId_problemId: {
           userId: (session?.user as User).id,

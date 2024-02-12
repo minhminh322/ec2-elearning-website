@@ -54,6 +54,9 @@ module.exports = {
       maxHeight: {
         "80vh": "80vh",
       },
+      height: {
+        "vh-minus-60": "calc(100vh - 60px)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
