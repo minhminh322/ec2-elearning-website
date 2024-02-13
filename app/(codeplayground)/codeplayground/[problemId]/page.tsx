@@ -1,7 +1,6 @@
 import getUserId from "@/actions/getUserId";
 import { CodePlayground } from "./_components/code-playground";
 import { redirect } from "next/navigation";
-import axios from "axios";
 
 export interface CodePlaygroundProps {
   userId: string;

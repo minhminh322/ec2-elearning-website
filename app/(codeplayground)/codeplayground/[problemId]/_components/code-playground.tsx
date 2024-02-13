@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/resizable";
 import { SetStateAction, useState } from "react";
 import { CodeEditor } from "./code-editor/code-editor";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { set } from "zod";
 import { CodeTerminal } from "./code-terminal/code-terminal";
@@ -122,7 +121,7 @@ export const CodePlayground = ({
 
   const handleCompile = () => {
     setProcessing(true);
-    console.log("URL compiled", `${process.env.AWS_BACKEND_BASE_URL}/submissions`);
+    const url = `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/submissions`;
     const formData = {
       userId,
       sourceCode: sourceCode,
@@ -130,26 +129,28 @@ export const CodePlayground = ({
       problemId,
     };
 
-    const options = {
+    // const options = {
+    //   method: "POST",
+    //   url: `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/submissions`, // TODO: change to backend url
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: formData,
+    // };
+
+    fetch(url, {
       method: "POST",
-      url: `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/submissions`, // TODO: change to backend url
       headers: {
-        "Content-Type": "application/json",
+        'Content-type': 'application/json',
       },
-      data: formData,
-    };
-    axios
-      .request(options)
-      .then(function (response) {
-        handleTestResult(response.data);
-        // setResultData(data);
-        setProcessing(false);
-      })
-      .catch(function (error) {
-        console.error(error);
-        setProcessing(false);
-        // Show error message
-      });
+      body: JSON.stringify(formData)
+    }).then(response => response.json()).then((data) => {
+      handleTestResult(data);
+      setProcessing(false);
+    }).catch((error) => {
+      console.error(error);
+      setProcessing(false);
+    });
   };
 
 
