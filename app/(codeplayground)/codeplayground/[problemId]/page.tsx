@@ -1,7 +1,8 @@
 import getUserId from "@/actions/getUserId";
 import { CodePlayground } from "./_components/code-playground";
 import { redirect } from "next/navigation";
-import axios from "axios";
+import { getProblemSubmissions } from "@/actions/getProblemSubmissions";
+import { Submission } from "@prisma/client";
 
 export interface CodePlaygroundProps {
   userId: string;
@@ -9,7 +10,9 @@ export interface CodePlaygroundProps {
   content: string;
   sc: [];
   solution: [];
-  testCases: TestCase[];
+  testCaseSimple: TestCase[];
+  testCaseFull: TestCase[];
+  submissions?: Submission[];
 }
 export interface TestCase {
   testName: string;
@@ -19,8 +22,19 @@ export interface TestCase {
     status: string;
     message: string;
     stdout: string;
+  };
+}
+[];
+
+async function getData(problemId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/code-playground?problemId=${problemId}`
+  );
+  if (response.ok) {
+    return response.json();
   }
-}[]
+  return null;
+}
 
 const CodePlaygroundPage = async ({
   params,
@@ -34,22 +48,24 @@ const CodePlaygroundPage = async ({
     return redirect("/");
   }
 
-  const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_AWS_BACKEND_BASE_URL}/code-playground?problemId=${params.problemId}`
-  );
+  const { content, sourceCode, solution, testCaseSimple, testCaseFull } =
+    await getData(params.problemId);
 
-  if (!response.data) {
-    throw new Error("Practice not found");
-  }
+  const submissions = await getProblemSubmissions(userId, params.problemId);
 
-  const { content, sourceCode, solution, testCases } = response.data;
-
-  const codePlaygroundProps: CodePlaygroundProps = { userId, problemId: params.problemId, content, sc: sourceCode, solution, testCases };
+  const codePlaygroundProps: CodePlaygroundProps = {
+    userId,
+    problemId: params.problemId,
+    content,
+    sc: sourceCode,
+    solution,
+    testCaseSimple,
+    testCaseFull,
+    submissions,
+  };
   return (
     <>
-      <CodePlayground
-        {...codePlaygroundProps}
-      />
+      <CodePlayground {...codePlaygroundProps} />
     </>
   );
 };

@@ -20,7 +20,7 @@ export const getLeetcodeProblem = async ({
   lesson,
 }: GetLeetcodeProblemProps) => {
   try {
-    const problems = (await db.LeetcodeProblem.findMany({
+    const problems = (await db.leetcodeProblem.findMany({
       where: {
         lessonId: lesson.id,
       },

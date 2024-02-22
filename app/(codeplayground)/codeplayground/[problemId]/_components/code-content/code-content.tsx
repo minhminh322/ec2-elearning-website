@@ -2,6 +2,7 @@ import { MarkdownNote } from "@/components/markdown-note";
 import { CodeContentProps } from "../code-playground";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { CodeSubmissions } from "./code-submissions";
 
 
 export const CodeContent = ({
@@ -9,6 +10,7 @@ export const CodeContent = ({
     content,
     sc,
     solution,
+    submissions
 }: CodeContentProps) => {
 
     const menu = [
@@ -22,7 +24,7 @@ export const CodeContent = ({
         },
         {
             title: "Submission",
-            component: <h1>This is the Submission content</h1>
+            component: <CodeSubmissions submissions={submissions} />
         }
     ]
     return (
