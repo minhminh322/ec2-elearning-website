@@ -12,16 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useTheme } from "next-themes";
-import {
-  oneLight,
-  oneDark,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useState, useEffect } from "react";
 
 export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
-  const { theme, setTheme } = useTheme();
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,11 +24,7 @@ export const SolutionButton = ({ sourceCode }: { sourceCode: string }) => {
       <DialogContent className=" max-w-5xl flex justify-center">
         {sourceCode ? (
           <div className="w-full h-full max-h-80vh">
-            <CodeGenerator
-              sourceCode={sourceCode}
-              language="python"
-              style={theme === "dark" ? oneDark : oneLight}
-            />
+            <CodeGenerator sourceCode={sourceCode} language="python" />
           </div>
         ) : (
           <div className="flex justify-center items-center h-full">

@@ -4,7 +4,6 @@ import { AuthButton } from "./auth-button";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import { NavMainMenu } from "./nav-main-menu";
-import { getDashboard } from "@/actions/getDashboard";
 
 type ProductProps = {
   id: string;
@@ -12,15 +11,6 @@ type ProductProps = {
   description: string;
 }[];
 export const Navbar = () => {
-  // const { allProducts } = await getDashboard("");
-  // const products = allProducts.map((product) => {
-  //   return {
-  //     id: product.id,
-  //     name: product.name,
-  //     description: product.description,
-  //   };
-  // }) as ProductProps;
-
   // MOCK DATA
   const products = [
     {

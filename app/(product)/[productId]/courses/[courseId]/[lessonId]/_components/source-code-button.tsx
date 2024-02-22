@@ -13,18 +13,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useTheme } from "next-themes";
-import {
-  oneLight,
-  oneDark,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const SourceCodeButton = ({
   codeBase,
 }: {
   codeBase: { [key: string]: string };
 }) => {
-  const { theme, setTheme } = useTheme();
   const keys = Object.keys(codeBase);
   return (
     <Dialog>
@@ -53,7 +47,6 @@ export const SourceCodeButton = ({
                 <CodeGenerator
                   sourceCode={codeBase[key]}
                   language="python"
-                  style={theme === "dark" ? oneDark : oneLight}
                   rest={undefined}
                 />
               </TabsContent>

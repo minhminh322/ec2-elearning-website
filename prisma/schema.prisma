@@ -75,6 +75,8 @@ model PracticeProblem {
   updatedAt    DateTime                      @updatedAt
   problemName  String
   content      String                        @default("")
+  category     PracticeProblemMainCategory   @default(Data_Structure)
+  difficulty   Difficulty                    @default(Easy)
   executeFile  String                        @default("")
   lessonId     String?                       @unique
   lesson       Lesson?                       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
@@ -218,6 +220,12 @@ enum LessonType {
   Exercise
   Note
   Optional
+}
+
+enum PracticeProblemMainCategory {
+  Basic_Exercise
+  Data_Structure
+  Algorithm
 }
 
 // enum SubmissionStatus {

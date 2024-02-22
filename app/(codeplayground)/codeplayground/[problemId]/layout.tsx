@@ -14,24 +14,9 @@ const CodePlaygroundLayout = async ({
   params: { problemId: string };
 }) => {
   return (
-    <div className="flex flex-col max-h-screen">
-      <div className="h-[50px] w-full">
-        <div className="h-full w-full flex items-center justify-between p-1">
-          <div className="my-auto cursor-pointer hover:rotate-12">
-            <Link href="/">
-              <Logo logoType="default" size={65} />
-            </Link>
-          </div>
-          <div className="flex items-center space-x-4 mr-3">
-            <ThemeToggle />
-            <AuthButton />
-          </div>
-        </div>
-      </div>
-      <Suspense fallback={<Loading />}>
-        <main>{children}</main>
-      </Suspense>
-    </div>
+    // <div className="flex flex-col">
+    <Suspense fallback={<Loading />}>{children}</Suspense>
+    // </div>
   );
 };
 

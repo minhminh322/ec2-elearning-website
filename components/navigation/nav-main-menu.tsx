@@ -57,7 +57,7 @@ export const NavMainMenu = ({ products }: { products: ProductProps }) => {
                     href="/"
                   >
                     {/* <Icons.logo className="h-6 w-6" /> */}
-                    <Logo logoType="full_brand" />
+                    <Logo size={200} logoType="full_brand" />
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Trai Code
                     </div>
@@ -98,9 +98,9 @@ export const NavMainMenu = ({ products }: { products: ProductProps }) => {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
+          <Link href="/codeplayground" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Roadmap
+              Code Playground
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
